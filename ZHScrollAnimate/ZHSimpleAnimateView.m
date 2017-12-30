@@ -18,7 +18,7 @@
 @property (nonatomic, weak)   UIView                        *tmpView;
 @property (nonatomic, assign) CGRect                        nextFrame;
 
-@property (nonatomic, copy)   getContentBlock               contentBlock;
+@property (nonatomic, copy)   viewForIndexBlock             viewForIndex;
 
 @end
 
@@ -95,8 +95,8 @@
 }
 
 - (void)getNewContentView{
-    if (self.contentBlock) {
-        UIView *aView = self.contentBlock(*_index);
+    if (self.viewForIndex) {
+        UIView *aView = self.viewForIndex(*_index);
         if (aView) {
             [self contentAddSubView:aView];
             *_index = *_index + 1;
@@ -128,8 +128,8 @@
         _view1 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
         _view1->_index = &_index;
         __weak typeof(self)weak_self = self;
-        _view1.contentBlock = ^UIView *(NSInteger index){
-            return weak_self.contentBlock ? weak_self.contentBlock(index):nil;
+        _view1.viewForIndex = ^UIView *(NSInteger index){
+            return weak_self.viewForIndex ? weak_self.viewForIndex(index):nil;
         };
     }
     return _view1;
@@ -139,8 +139,8 @@
         _view2 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
         _view2->_index = &_index;
         __weak typeof(self)weak_self = self;
-        _view2.contentBlock = ^UIView *(NSInteger index){
-            return weak_self.contentBlock ? weak_self.contentBlock(index):nil;
+        _view2.viewForIndex = ^UIView *(NSInteger index){
+            return weak_self.viewForIndex ? weak_self.viewForIndex(index):nil;
         };
     }
     return _view2;
@@ -246,7 +246,6 @@
         self.isAminating = YES;
         NSTimeInterval duration     = animate ? 0.5 : 0;
         UIViewAnimationOptions ops  = animate ? (self.scrollType|UIViewAnimationOptionShowHideTransitionViews):UIViewAnimationOptionShowHideTransitionViews;
-        
         [UIView transitionFromView:self.tmpView1 toView:self.tmpView2 duration:duration options:ops completion:^(BOOL finished) {
             [self.tmpView1 getNewContentView];
             ZHSimpleScrollContentView *tmp     = self.tmpView1;
