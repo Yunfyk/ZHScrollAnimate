@@ -174,7 +174,7 @@
 }
 - (void)initDataWithType:(kMSimpleAnimateType)scrollType{
     _index = -1;
-//    self.clipsToBounds          = YES;
+    self.clipsToBounds          = YES;
     self.autoAnimate            = NO;
     self.timeInterval           = 3.0f;
     self.scrollType             = scrollType;
