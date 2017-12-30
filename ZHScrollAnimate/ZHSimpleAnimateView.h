@@ -26,6 +26,9 @@ typedef enum : NSUInteger {
 typedef UIView *(^viewForIndexBlock)(NSInteger index);
 
 @interface ZHSimpleAnimateView : UIView
+
+@property (strong, readonly)  UIView            *contentView;
+@property (strong, readonly)  UIImageView       *backgroudImageView;
 //获取子视图，大小与本视图大小一致，填充整个区域
 @property (nonatomic, copy)   viewForIndexBlock viewForIndex;
 //自动开始动画/滚动

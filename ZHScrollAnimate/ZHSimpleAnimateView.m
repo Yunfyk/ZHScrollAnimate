@@ -37,12 +37,11 @@
         self.tmpView = aView;
         aView.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:aView];
-        NSString *hvfl = @"H:|[aView(==self)]";
-        NSString *vvfl = @"V:|[aView(==self)]";
-        NSDictionary *views = NSDictionaryOfVariableBindings(self,aView);
-        NSLayoutFormatOptions ops = NSLayoutFormatAlignAllCenterX|NSLayoutFormatAlignAllCenterY;
-        NSArray *Hconstrains = [NSLayoutConstraint constraintsWithVisualFormat:hvfl options:ops metrics:nil views:views];
-        NSArray *Vconstrains = [NSLayoutConstraint constraintsWithVisualFormat:vvfl options:ops metrics:nil views:views];
+        NSString *hvfl = @"H:|-0-[aView]-0-|";
+        NSString *vvfl = @"V:|-0-[aView]-0-|";
+        NSDictionary *views = NSDictionaryOfVariableBindings(aView);
+        NSArray *Hconstrains = [NSLayoutConstraint constraintsWithVisualFormat:hvfl options:0 metrics:nil views:views];
+        NSArray *Vconstrains = [NSLayoutConstraint constraintsWithVisualFormat:vvfl options:0 metrics:nil views:views];
         [self addConstraints:Hconstrains];
         [self addConstraints:Vconstrains];
     }
@@ -123,6 +122,8 @@
 @implementation ZHSimpleAnimateView{
     NSInteger _index;
 }
+@synthesize contentView=_contentView,backgroudImageView=_backgroudImageView;
+
 - (ZHSimpleScrollContentView *)view1{
     if (!_view1) {
         _view1 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
@@ -138,6 +139,7 @@
     if (!_view2) {
         _view2 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
         _view2->_index = &_index;
+        _view2.hidden = YES;
         __weak typeof(self)weak_self = self;
         _view2.viewForIndex = ^UIView *(NSInteger index){
             return weak_self.viewForIndex ? weak_self.viewForIndex(index):nil;
@@ -145,7 +147,30 @@
     }
     return _view2;
 }
-
+- (UIView *)contentView{
+    if (!_contentView) {
+        _contentView                = [[UIView alloc] init];
+        _contentView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self insertSubview:_contentView atIndex:0];
+        NSArray *HC = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[_contentView]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_contentView)];
+        NSArray *VC = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_contentView]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_contentView)];
+        [self addConstraints:HC];
+        [self addConstraints:VC];
+    }
+    return _contentView;
+}
+- (UIImageView *)backgroudImageView{
+    if (!_backgroudImageView) {
+        _backgroudImageView                = [[UIImageView alloc] init];
+        _backgroudImageView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self insertSubview:_backgroudImageView aboveSubview:self.contentView];
+        NSArray *HC = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[_backgroudImageView]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(self,_backgroudImageView)];
+        NSArray *VC = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_backgroudImageView]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(self,_backgroudImageView)];
+        [self addConstraints:HC];
+        [self addConstraints:VC];
+    }
+    return _backgroudImageView;
+}
 - (ZHWeakTimer *)timer{
     if (!_timer) {
         _timer = [ZHWeakTimer weakTimerWithTimeInterval:self.timeInterval target:self selector:@selector(autoAnimateDispatch) userInfo:nil repeats:YES];
@@ -182,8 +207,6 @@
     [self addSubview:self.view1];
     self.tmpView1 = self.view1;
     self.tmpView2 = self.view2;
-    self.view1.backgroundColor  = [UIColor brownColor];
-    self.view2.backgroundColor  = [UIColor purpleColor];
 }
 
 - (void)didMoveToWindow{

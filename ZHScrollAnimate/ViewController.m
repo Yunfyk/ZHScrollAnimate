@@ -27,7 +27,7 @@
     
 //    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeB2T];
     self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeCurlUp];
-    self.scrollView.autoAnimate     = YES;
+//    self.scrollView.autoAnimate     = YES;
     self.scrollView.timeInterval    = 4;
     //    self.scrollView.frame = CGRectMake(80, 80, 200, 30);
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -44,7 +44,7 @@
     self.scrollView.viewForIndex = ^UIView *(NSInteger index){
         NSLog(@"%ld",index);
         UILabel *label = [[UILabel alloc] init];
-        label.backgroundColor = [UIColor colorWithRed:1.0 green:arc4random()%125/255.0 blue:arc4random()%125/255.0 alpha:1.0];
+        label.backgroundColor = [UIColor colorWithRed:1.0 green:arc4random()%125/255.0 blue:arc4random()%125/255.0 alpha:1];
         label.textColor = [UIColor whiteColor];
         label.textAlignment = NSTextAlignmentCenter;
         label.text = wkSelf.names[index%wkSelf.names.count];
