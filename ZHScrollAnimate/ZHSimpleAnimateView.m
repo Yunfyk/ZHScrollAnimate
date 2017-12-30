@@ -54,49 +54,39 @@
 }
 
 - (void)nextFrameRecord{
-    if (self.scrollType == kMSimpleAnimateTypeR2L) {
-        if (self.frame.origin.x == -self.frame.size.width) {
-            self.nextFrame = (CGRect){(CGPoint){self.frame.size.width,0},self.frame.size};
+    if (self.scrollType == kMSimpleAnimateTypeR2L || self.scrollType == kMSimpleAnimateTypeL2R) {
+        CGFloat mutipValue = self.scrollType == kMSimpleAnimateTypeR2L ? 1.0 : -1.0;
+        if (self.frame.origin.x == -mutipValue * self.frame.size.width) {
+            self.nextFrame = (CGRect){(CGPoint){mutipValue * self.frame.size.width,0},self.frame.size};
         }else if (self.frame.origin.x == 0){
-            self.nextFrame = (CGRect){(CGPoint){-self.frame.size.width,0},self.frame.size};
-        }else if (self.frame.origin.x == self.frame.size.width){
+            self.nextFrame = (CGRect){(CGPoint){-mutipValue * self.frame.size.width,0},self.frame.size};
+        }else if (self.frame.origin.x == mutipValue * self.frame.size.width){
             self.nextFrame = (CGRect){(CGPoint){0,0},self.frame.size};
         }
-    }else if (self.scrollType == kMSimpleAnimateTypeB2T){
-        if (self.frame.origin.y == -self.frame.size.height) {
-            self.nextFrame = (CGRect){(CGPoint){0,self.frame.size.height},self.frame.size};
+    }else if (self.scrollType == kMSimpleAnimateTypeB2T || self.scrollType == kMSimpleAnimateTypeT2B){
+        CGFloat mutipValue = self.scrollType == kMSimpleAnimateTypeB2T ? 1.0 : -1.0;
+        if (self.frame.origin.y == -mutipValue * self.frame.size.height) {
+            self.nextFrame = (CGRect){(CGPoint){0,mutipValue * self.frame.size.height},self.frame.size};
         }else if (self.frame.origin.y == 0){
-            self.nextFrame = (CGRect){(CGPoint){0,-self.frame.size.height},self.frame.size};
-        }else if (self.frame.origin.y == self.frame.size.height){
+            self.nextFrame = (CGRect){(CGPoint){0,-mutipValue * self.frame.size.height},self.frame.size};
+        }else if (self.frame.origin.y == mutipValue * self.frame.size.height){
             self.nextFrame = (CGRect){(CGPoint){0,0},self.frame.size};
-        }
-    }else if (self.scrollType == kMSimpleAnimateTypeT2B){
-        if (self.frame.origin.y == -self.frame.size.height) {
-            self.nextFrame = (CGRect){(CGPoint){0,0},self.frame.size};
-        }else if (self.frame.origin.y == 0){
-            self.nextFrame = (CGRect){(CGPoint){0,self.frame.size.height},self.frame.size};
-        }else if (self.frame.origin.y == self.frame.size.height){
-            self.nextFrame = (CGRect){(CGPoint){0,- self.frame.size.height},self.frame.size};
         }
     }
 }
 
 - (void)finishAnimation{
     [self nextFrameRecord];
-    if (self.scrollType == kMSimpleAnimateTypeR2L) {
-        if (self.frame.origin.x == -self.frame.size.width) {
+    if (self.scrollType == kMSimpleAnimateTypeR2L || self.scrollType == kMSimpleAnimateTypeL2R) {
+        CGFloat mutipValue = self.scrollType == kMSimpleAnimateTypeR2L ? 1.0 : -1.0;
+        if (self.frame.origin.x == -mutipValue * self.frame.size.width) {
             [self setFrame:self.nextFrame];
             [self getNewContentView];
             [self nextFrameRecord];
         }
-    }else if (self.scrollType == kMSimpleAnimateTypeB2T){
-        if (self.frame.origin.y == -self.frame.size.height) {
-            [self setFrame:self.nextFrame];
-            [self getNewContentView];
-            [self nextFrameRecord];
-        }
-    }else if (self.scrollType == kMSimpleAnimateTypeT2B){
-        if (self.frame.origin.y == self.frame.size.height) {
+    }else if (self.scrollType == kMSimpleAnimateTypeB2T || self.scrollType == kMSimpleAnimateTypeT2B){
+        CGFloat mutipValue = self.scrollType == kMSimpleAnimateTypeB2T ? 1.0 : -1.0;
+        if (self.frame.origin.y == -mutipValue * self.frame.size.height) {
             [self setFrame:self.nextFrame];
             [self getNewContentView];
             [self nextFrameRecord];
@@ -184,7 +174,7 @@
 }
 - (void)initDataWithType:(kMSimpleAnimateType)scrollType{
     _index = -1;
-    self.clipsToBounds          = YES;
+//    self.clipsToBounds          = YES;
     self.autoAnimate            = NO;
     self.timeInterval           = 3.0f;
     self.scrollType             = scrollType;
@@ -229,7 +219,7 @@
     if (self.autoAnimate && !isAuto) {
         [self invaliadTimer];
     }
-    if (kMSimpleAnimateTypeB2T == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType || kMSimpleAnimateTypeT2B == self.scrollType) {
+    if (kMSimpleAnimateTypeB2T == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType || kMSimpleAnimateTypeT2B == self.scrollType || kMSimpleAnimateTypeL2R == self.scrollType) {
         self.isAminating = YES;
         if (animate) {
             [UIView animateWithDuration:0.6 animations:^{
@@ -276,6 +266,9 @@
         [self.view1 nextFrameRecord];
         if (kMSimpleAnimateTypeR2L == self.scrollType) {
             [self.view2 setFrame:(CGRect){(CGPoint){self.frame.size.width,0},self.frame.size}];
+            [self.view2 nextFrameRecord];
+        }else if (kMSimpleAnimateTypeL2R == self.scrollType){
+            [self.view2 setFrame:(CGRect){(CGPoint){-self.frame.size.width,0},self.frame.size}];
             [self.view2 nextFrameRecord];
         }else if (kMSimpleAnimateTypeB2T == self.scrollType){
             [self.view2 setFrame:(CGRect){(CGPoint){0,self.frame.size.height},self.frame.size}];

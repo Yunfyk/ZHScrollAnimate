@@ -10,6 +10,7 @@
 
 typedef enum : NSUInteger {
     kMSimpleAnimateTypeR2L  = 10,       //右向左
+    kMSimpleAnimateTypeL2R,             //左向右
     kMSimpleAnimateTypeB2T,             //下向上
     kMSimpleAnimateTypeT2B,             //上向下
     
