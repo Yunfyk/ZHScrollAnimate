@@ -139,7 +139,9 @@
     if (!_view2) {
         _view2 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
         _view2->_index = &_index;
-        _view2.hidden = YES;
+        if (self.scrollType >= (1 << 20)) {
+            _view2.hidden = YES;
+        }
         __weak typeof(self)weak_self = self;
         _view2.viewForIndex = ^UIView *(NSInteger index){
             return weak_self.viewForIndex ? weak_self.viewForIndex(index):nil;
