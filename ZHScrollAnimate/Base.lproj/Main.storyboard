@@ -22,7 +22,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1yy-Kz-oSG">
-                                <rect key="frame" x="171" y="517" width="32" height="30"/>
+                                <rect key="frame" x="171" y="607" width="32" height="30"/>
                                 <state key="normal" title="Next"/>
                                 <connections>
                                     <action selector="next" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zdb-1n-TcF"/>
@@ -31,7 +31,7 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="1yy-Kz-oSG" secondAttribute="bottom" constant="120" id="4wB-uv-XgC"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="1yy-Kz-oSG" secondAttribute="bottom" constant="30" id="4wB-uv-XgC"/>
                             <constraint firstItem="1yy-Kz-oSG" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="oEf-eM-r7I"/>
                         </constraints>
                     </view>
