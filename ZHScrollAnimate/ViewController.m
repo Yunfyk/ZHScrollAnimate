@@ -33,7 +33,7 @@
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.scrollView];
     self.scrollView.backgroudImageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.scrollView.backgroudImageView.image = [UIImage imageNamed:@"2"];
+    self.scrollView.backgroudImageView.image = [UIImage imageNamed:@"1"];
     
     NSArray *HC = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-80-[scrollView(200)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"scrollView":self.scrollView}];
     NSArray *VC = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-80-[scrollView(30)]" options:0 metrics:nil views:@{@"scrollView":self.scrollView}];
@@ -45,7 +45,6 @@
     self.scrollView.viewForIndex = ^UIView *(NSInteger index){
         NSLog(@"%ld",index);
         UILabel *label = [[UILabel alloc] init];
-        label.backgroundColor = [UIColor colorWithRed:1.0 green:arc4random()%125/255.0 blue:arc4random()%125/255.0 alpha:0.5];
         label.textColor = [UIColor whiteColor];
         label.textAlignment = NSTextAlignmentCenter;
         label.text = wkSelf.names[index%wkSelf.names.count];

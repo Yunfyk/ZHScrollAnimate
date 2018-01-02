@@ -26,14 +26,15 @@ typedef enum : NSUInteger {
 typedef UIView *(^viewForIndexBlock)(NSInteger index);
 
 @interface ZHSimpleAnimateView : UIView
-
+/** 底层视图 */
 @property (strong, readonly)  UIView            *contentView;
+/** 背景图片 */
 @property (strong, readonly)  UIImageView       *backgroudImageView;
-//获取子视图，大小与本视图大小一致，填充整个区域
+/** 获取子视图，大小与本视图大小一致，填充整个区域 */
 @property (nonatomic, copy)   viewForIndexBlock viewForIndex;
-//自动开始动画/滚动
+/** 是否开始自动动画/滚动 */
 @property (assign, nonatomic) BOOL              autoAnimate;
-//动画间隔,默认3s
+/** 动画间隔,默认3s */
 @property (assign, nonatomic) NSTimeInterval    timeInterval;
 
 - (instancetype)initWithScrollType:(kMSimpleAnimateType)scrollType;
