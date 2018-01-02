@@ -298,15 +298,15 @@
 }
 
 - (void)next{
-    [self nextWithAnimate:YES];
+    [self nextWithAnimate:YES complete:nil];
 }
 - (void)autoAnimateDispatch{
-    [self nextWithAnimate:YES isauto:YES];
+    [self nextWithAnimate:YES isauto:YES complete:nil];
 }
-- (void)nextWithAnimate:(BOOL)animate{
-    [self nextWithAnimate:animate isauto:NO];
+- (void)nextWithAnimate:(BOOL)animate complete:(void (^)(BOOL))completeHandle{
+    [self nextWithAnimate:animate isauto:NO complete:completeHandle];
 }
-- (void)nextWithAnimate:(BOOL)animate isauto:(BOOL)isAuto{
+- (void)nextWithAnimate:(BOOL)animate isauto:(BOOL)isAuto  complete:(void (^)(BOOL))completeHandle{
     if (!self.view1.tmpView || !self.view2.tmpView) {//资源少于两个直接返回
         NSLog(@"至少传入两个子view");
         return;
@@ -333,6 +333,9 @@
                 if (self.autoAnimate && !isAuto) {
                     [self.timer fireTimer];
                 }
+                if (completeHandle) {
+                    completeHandle(finished);
+                }
             }];
         }else{
             [self.view1 setFrame:self.view1.nextFrame];
@@ -341,6 +344,9 @@
             [self.view2 finishAnimation];
             if (self.autoAnimate && !isAuto) {
                 [self.timer fireTimer];
+            }
+            if (completeHandle) {
+                completeHandle(YES);
             }
         }
     }else if (self.scrollType >= (1 << 20)){
@@ -355,6 +361,9 @@
             self.isAminating= NO;
             if (self.autoAnimate && !isAuto) {
                 [self.timer fireTimer];
+            }
+            if (completeHandle) {
+                completeHandle(finished);
             }
         }];
     }

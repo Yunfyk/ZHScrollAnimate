@@ -60,7 +60,9 @@
 }
 
 - (IBAction)next {
-    [self.scrollView nextWithAnimate:YES];
+    [self.scrollView nextWithAnimate:YES complete:^(BOOL finished) {
+        NSLog(@"complete finished %d",finished);
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

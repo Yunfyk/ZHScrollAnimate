@@ -37,11 +37,17 @@ typedef UIView *(^viewForIndexBlock)(NSInteger index);
 /** 动画间隔,默认3s */
 @property (assign, nonatomic) NSTimeInterval    timeInterval;
 
-- (instancetype)initWithScrollType:(kMSimpleAnimateType)scrollType;
-
-//next with animate YES
+/** next with animate YES */
 - (void)next;
 //下一个
-- (void)nextWithAnimate:(BOOL)animate;
+/**
+ next page with animate ops and complete handler
+ 
+ @param animate YES or NO for animate
+ @param completeHandle animate complete callback
+ */
+- (void)nextWithAnimate:(BOOL)animate complete:(void(^)(BOOL finished))completeHandle;
+
+- (instancetype)initWithScrollType:(kMSimpleAnimateType)scrollType;
 
 @end
