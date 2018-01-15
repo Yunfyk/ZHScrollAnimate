@@ -13,6 +13,7 @@
 {
 @public
     NSInteger      *_index;
+    NSInteger      *_showIndex;
 }
 @property (nonatomic, assign) kMSimpleAnimateType           scrollType;
 @property (nonatomic, weak)   UIView                        *tmpView;
@@ -153,6 +154,15 @@
 
 - (void)getNewContentView{
     if (self.viewForIndex) {
+        if (self.scrollType < (1 << 20)) {
+            if (CGRectEqualToRect(self.frame, self.superview.bounds)) {
+                *_showIndex = *_index;
+            }else{
+                *_showIndex = *_index - 1;
+            }
+        }else{
+            *_showIndex      = *_index < 1 ? 0 : *_index - 1;
+        }
         UIView *aView = self.viewForIndex(*_index);
         if (aView) {
             [self contentAddSubView:aView];
@@ -168,7 +178,8 @@
 @property (nonatomic, assign) kMSimpleAnimateType           scrollType;
 @property (nonatomic, strong) ZHSimpleScrollContentView     *view1;
 @property (nonatomic, strong) ZHSimpleScrollContentView     *view2;
-@property (nonatomic, readonly) ZHSimpleScrollContentView   *view3;
+@property (nonatomic, readonly)ZHSimpleScrollContentView    *view3;
+@property (nonatomic, weak)   ZHSimpleScrollContentView     *currentShowView;
 @property (nonatomic, assign) BOOL                          isAminating;
 
 @property (weak, nonatomic)   ZHSimpleScrollContentView     *tmpView1;
@@ -180,6 +191,7 @@
 
 @implementation ZHSimpleAnimateView{
     NSInteger _index;
+    NSInteger _showIndex;
 }
 @synthesize contentView=_contentView,backgroudImageView=_backgroudImageView;
 @synthesize view3=_view3;
@@ -187,7 +199,9 @@
 - (ZHSimpleScrollContentView *)view1{
     if (!_view1) {
         _view1 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
+        _view1.frame = self.bounds;
         _view1->_index = &_index;
+        _view1->_showIndex = &_showIndex;
         __weak typeof(self)weak_self = self;
         _view1.viewForIndex = ^UIView *(NSInteger index){
             return weak_self.viewForIndex ? weak_self.viewForIndex(index):nil;
@@ -198,7 +212,9 @@
 - (ZHSimpleScrollContentView *)view2{
     if (!_view2) {
         _view2 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
+        _view2.frame = CGRectMake(10, 10, 10, 10);
         _view2->_index = &_index;
+        _view2->_showIndex = &_showIndex;
         if (self.scrollType >= (1 << 20)) {
             _view2.hidden = YES;
         }
@@ -213,6 +229,7 @@
     if (!_view3) {
         _view3 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
         _view3->_index = &_index;
+        _view3->_showIndex = &_showIndex;
         __weak typeof(self)weak_self = self;
         _view3.viewForIndex = ^UIView *(NSInteger index){
             return weak_self.viewForIndex ? weak_self.viewForIndex(index):nil;
@@ -266,6 +283,7 @@
 
 - (instancetype)initWithScrollType:(kMSimpleAnimateType)scrollType{
     if (self = [super init]) {
+        self.frame = CGRectMake(0, 0, 100, 20);
         [self initDataWithType:scrollType];
     }
     return self;
@@ -283,8 +301,15 @@
     [self addSubview:self.view1];
     self.tmpView1 = self.view1;
     self.tmpView2 = self.view2;
+    self.currentShowView = self.view1;
 }
 
+- (NSInteger)showIndex{
+    return _showIndex;
+}
+- (UIView *)showView{
+    return self.currentShowView.tmpView;
+}
 - (void)didMoveToWindow{
     if (_index == -1) {
         _index = 0;
@@ -292,6 +317,9 @@
         [self.view2 getNewContentView];
         if (self.autoAnimate) {
             [self.timer fireTimer];
+        }
+        if (self.viewWillShow) {
+            self.viewWillShow(self.currentShowView.tmpView);
         }
     }
     [super didMoveToWindow];
@@ -320,6 +348,16 @@
     }
     if (kMSimpleAnimateTypeB2T == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType || kMSimpleAnimateTypeT2B == self.scrollType || kMSimpleAnimateTypeL2R == self.scrollType) {
         self.isAminating = YES;
+        if (CGRectEqualToRect(self.view1.nextFrame, self.bounds)) {
+            self.currentShowView = self.view1;
+        }else if (CGRectEqualToRect(self.view2.nextFrame, self.bounds)){
+            self.currentShowView = self.view2;
+        }else if (CGRectEqualToRect(self.view3.nextFrame, self.bounds)){
+            self.currentShowView = self.view3;
+        }
+        if (self.viewWillShow) {
+            self.viewWillShow(self.currentShowView.tmpView);
+        }
         if (animate) {
             [UIView animateWithDuration:0.6 animations:^{
                 [self.view1 setFrame:self.view1.nextFrame];
@@ -333,6 +371,9 @@
                 if (self.autoAnimate && !isAuto) {
                     [self.timer fireTimer];
                 }
+                if (self.viewDidShowAtIndex) {
+                    self.viewDidShowAtIndex(self.currentShowView.tmpView, self.showIndex);
+                }
                 if (completeHandle) {
                     completeHandle(finished);
                 }
@@ -345,6 +386,9 @@
             if (self.autoAnimate && !isAuto) {
                 [self.timer fireTimer];
             }
+            if (self.viewDidShowAtIndex) {
+                self.viewDidShowAtIndex(self.currentShowView.tmpView, self.showIndex);
+            }
             if (completeHandle) {
                 completeHandle(YES);
             }
@@ -353,7 +397,14 @@
         self.isAminating = YES;
         NSTimeInterval duration     = animate ? 0.5 : 0;
         UIViewAnimationOptions ops  = animate ? (self.scrollType|UIViewAnimationOptionShowHideTransitionViews):UIViewAnimationOptionShowHideTransitionViews;
+        self.currentShowView = self.tmpView2;
+        if (self.viewWillShow) {
+            self.viewWillShow(self.currentShowView);
+        }
         [UIView transitionFromView:self.tmpView1 toView:self.tmpView2 duration:duration options:ops completion:^(BOOL finished) {
+            if (self.viewDidShowAtIndex) {
+                self.viewDidShowAtIndex(self.currentShowView.tmpView, self.showIndex);
+            }
             [self.tmpView1 getNewContentView];
             ZHSimpleScrollContentView *tmp     = self.tmpView1;
             self.tmpView1  = self.tmpView2;
@@ -396,6 +447,10 @@
     if (self.view1.frame.size.width != self.frame.size.width || self.view1.frame.size.height != self.frame.size.height) {
         [self.view1 setFrame:self.bounds];
         [self.view1 nextFrameRecord];
+        [self.view1 layoutIfNeeded];
+        if (self.viewDidShowAtIndex) {
+            self.viewDidShowAtIndex(self.currentShowView.tmpView, self.showIndex);
+        }
         if (kMSimpleAnimateTypeR2L == self.scrollType) {
             [self.view2 setFrame:(CGRect){(CGPoint){self.frame.size.width,0},self.frame.size}];
             [self.view2 nextFrameRecord];
@@ -425,7 +480,7 @@
 
 - (void)dealloc
 {
-    [self.timer invaliadTimer];
+    [_timer invaliadTimer];
     NSLog(@"%s",__func__);
 }
 

@@ -43,12 +43,18 @@
     
     __weak typeof(self)wkSelf = self;
     self.scrollView.viewForIndex = ^UIView *(NSInteger index){
-        NSLog(@"%ld",index);
+//        NSLog(@"%ld | showIndex : %ld",index,wkSelf.scrollView.showIndex);
         UILabel *label = [[UILabel alloc] init];
         label.textColor = [UIColor whiteColor];
         label.textAlignment = NSTextAlignmentCenter;
         label.text = wkSelf.names[index%wkSelf.names.count];
         return label;
+    };
+    self.scrollView.viewWillShow = ^(UIView *subView) {
+        NSLog(@"[Will Show : %@]",subView);
+    };
+    self.scrollView.viewDidShowAtIndex = ^(UIView *subView, NSInteger index) {
+        NSLog(@"[Did Show : %@ | Index %ld]",subView,index);
     };
 //    self.scrollView.viewForIndex = ^UIView *(NSInteger index){
 //        NSLog(@"%ld",index);
@@ -60,8 +66,10 @@
 }
 
 - (IBAction)next {
+//    __weak typeof(self)wkSelf = self;
     [self.scrollView nextWithAnimate:YES complete:^(BOOL finished) {
-        NSLog(@"complete finished %d",finished);
+//        NSLog(@"complete finished %d",finished);
+//        NSLog(@"%@",wkSelf.scrollView.showView);
     }];
 }
 

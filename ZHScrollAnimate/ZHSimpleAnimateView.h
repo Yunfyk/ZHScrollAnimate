@@ -36,6 +36,14 @@ typedef UIView *(^viewForIndexBlock)(NSInteger index);
 @property (assign, nonatomic) BOOL              autoAnimate;
 /** 动画间隔,默认3s */
 @property (assign, nonatomic) NSTimeInterval    timeInterval;
+/** 当前显示的index */
+@property (nonatomic, readonly) NSInteger       showIndex;
+/** 当前显示的View */
+@property (nonatomic, readonly) UIView          *showView;
+/** 视图即将显示在中间 */
+@property (nonatomic, copy)   void(^viewWillShow)(UIView *subView);
+/** 视图已经显示在中间 */
+@property (nonatomic, copy)   void(^viewDidShowAtIndex)(UIView *subView,NSInteger index);
 
 /** next with animate YES */
 - (void)next;
