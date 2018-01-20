@@ -25,7 +25,8 @@
     
     self.names = @[@"人生若只如初见",@"何事秋风悲画扇",@"等闲变却故人心",@"却道故人心易变",@"骊山语罢清宵半",@"泪雨霖铃终不怨",@"何如薄幸锦衣郎",@"比翼连枝当日愿"];
     
-    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeB2T];
+    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeR2L];
+    self.scrollView.scrollEnable = YES;
 //    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeCurlUp];
 //    self.scrollView.autoAnimate     = YES;
     self.scrollView.timeInterval    = 4;
@@ -35,27 +36,29 @@
     self.scrollView.backgroudImageView.contentMode = UIViewContentModeScaleAspectFill;
     self.scrollView.backgroudImageView.image = [UIImage imageNamed:@"1"];
     
-    NSArray *HC = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-80-[scrollView(200)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"scrollView":self.scrollView}];
-    NSArray *VC = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-80-[scrollView(30)]" options:0 metrics:nil views:@{@"scrollView":self.scrollView}];
+    NSArray *HC = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-120-[scrollView(200)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"scrollView":self.scrollView}];
+    NSArray *VC = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-180-[scrollView(60)]" options:0 metrics:nil views:@{@"scrollView":self.scrollView}];
     
     [self.view addConstraints:HC];
     [self.view addConstraints:VC];
-    
+    self.scrollView.numberOfRows = 10;
     __weak typeof(self)wkSelf = self;
     self.scrollView.viewForIndex = ^UIView *(NSInteger index){
 //        NSLog(@"%ld | showIndex : %ld",index,wkSelf.scrollView.showIndex);
         UILabel *label = [[UILabel alloc] init];
+        label.backgroundColor = [UIColor colorWithRed:(arc4random()%100+100)/255.0 green:0.3 blue:0.3 alpha:1];
         label.textColor = [UIColor whiteColor];
         label.textAlignment = NSTextAlignmentCenter;
         label.text = wkSelf.names[index%wkSelf.names.count];
         return label;
     };
-    self.scrollView.viewWillShow = ^(UIView *subView) {
-        NSLog(@"[Will Show : %@]",subView);
-    };
-    self.scrollView.viewDidShowAtIndex = ^(UIView *subView, NSInteger index) {
-        NSLog(@"[Did Show : %@ | Index %ld]",subView,index);
-    };
+    
+//    self.scrollView.viewWillShow = ^(UIView *subView) {
+//        NSLog(@"[Will Show : %@]",subView);
+//    };
+//    self.scrollView.viewDidShowAtIndex = ^(UIView *subView, NSInteger index) {
+//        NSLog(@"[Did Show : %@ | Index %ld]",subView,index);
+//    };
 //    self.scrollView.viewForIndex = ^UIView *(NSInteger index){
 //        NSLog(@"%ld",index);
 //        UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%ld",(index%3)]]];
@@ -63,6 +66,11 @@
 //    };
 
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self.scrollView scrollToIndex:5 animate:YES];
 }
 
 - (IBAction)next {

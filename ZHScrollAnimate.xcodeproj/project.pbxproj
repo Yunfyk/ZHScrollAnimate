@@ -15,6 +15,7 @@
 		F49161B01FF738D700C90F5F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F49161AE1FF738D700C90F5F /* LaunchScreen.storyboard */; };
 		F49161BB1FF738F900C90F5F /* ZHSimpleAnimateView.m in Sources */ = {isa = PBXBuildFile; fileRef = F49161B81FF738F900C90F5F /* ZHSimpleAnimateView.m */; };
 		F49161BC1FF738F900C90F5F /* ZHWeakTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = F49161BA1FF738F900C90F5F /* ZHWeakTimer.m */; };
+		F4CDD025200DCE840080FA05 /* ZHSimpleScrollContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4CDD024200DCE840080FA05 /* ZHSimpleScrollContentView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,8 @@
 		F49161B81FF738F900C90F5F /* ZHSimpleAnimateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZHSimpleAnimateView.m; sourceTree = "<group>"; };
 		F49161B91FF738F900C90F5F /* ZHWeakTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZHWeakTimer.h; sourceTree = "<group>"; };
 		F49161BA1FF738F900C90F5F /* ZHWeakTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZHWeakTimer.m; sourceTree = "<group>"; };
+		F4CDD023200DCE840080FA05 /* ZHSimpleScrollContentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHSimpleScrollContentView.h; sourceTree = "<group>"; };
+		F4CDD024200DCE840080FA05 /* ZHSimpleScrollContentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHSimpleScrollContentView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +74,8 @@
 				F49161A91FF738D700C90F5F /* Main.storyboard */,
 				F49161B71FF738F900C90F5F /* ZHSimpleAnimateView.h */,
 				F49161B81FF738F900C90F5F /* ZHSimpleAnimateView.m */,
+				F4CDD023200DCE840080FA05 /* ZHSimpleScrollContentView.h */,
+				F4CDD024200DCE840080FA05 /* ZHSimpleScrollContentView.m */,
 				F49161B91FF738F900C90F5F /* ZHWeakTimer.h */,
 				F49161BA1FF738F900C90F5F /* ZHWeakTimer.m */,
 				F49161AC1FF738D700C90F5F /* Assets.xcassets */,
@@ -164,6 +169,7 @@
 				F49161BC1FF738F900C90F5F /* ZHWeakTimer.m in Sources */,
 				F49161A81FF738D700C90F5F /* ViewController.m in Sources */,
 				F49161A51FF738D700C90F5F /* AppDelegate.m in Sources */,
+				F4CDD025200DCE840080FA05 /* ZHSimpleScrollContentView.m in Sources */,
 				F49161BB1FF738F900C90F5F /* ZHSimpleAnimateView.m in Sources */,
 				F49161A21FF738D700C90F5F /* main.m in Sources */,
 			);
