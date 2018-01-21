@@ -9,66 +9,19 @@
 #import "ZHSimpleAnimateView.h"
 #import "ZHWeakTimer.h"
 #import <objc/runtime.h>
+#import "ZHSimpleAnimateContent.h"
 
 @interface ZHSimpleAnimateView()<UIScrollViewDelegate>
 
 @property (nonatomic, assign) kMSimpleAnimateType           scrollType;
-@property (nonatomic, strong) UIScrollView                  *scrollView;
-@property (nonatomic, strong) ZHSimpleScrollContentView     *view1;
-@property (nonatomic, strong) ZHSimpleScrollContentView     *view2;
-@property (nonatomic, readonly)ZHSimpleScrollContentView    *view3;
+@property (nonatomic, strong) UIScrollView                  *scrollView;//三个view的容器
+@property (strong, nonatomic) ZHSimpleAnimateContent        *scrollContainerView;
 @property (nonatomic, weak)   ZHSimpleScrollContentView     *currentShowView;
-@property (nonatomic, assign) BOOL                          isAminating;
-
-@property (weak, nonatomic)   ZHSimpleScrollContentView     *tmpView1;
-@property (weak, nonatomic)   ZHSimpleScrollContentView     *tmpView2;
-
-@property (strong, nonatomic) ZHWeakTimer                   *timer;
 
 @end
 
-@implementation ZHSimpleAnimateView{
-    NSInteger _index;
-    NSInteger _showIndex;
-}
+@implementation ZHSimpleAnimateView
 @synthesize contentView=_contentView,backgroudImageView=_backgroudImageView;
-@synthesize view3=_view3;
-
-- (ZHSimpleScrollContentView *)view1{
-    if (!_view1) {
-        _view1 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
-        _view1.frame = self.bounds;
-        [self commonViewConfigure:_view1];
-    }
-    return _view1;
-}
-- (ZHSimpleScrollContentView *)view2{
-    if (!_view2) {
-        _view2 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
-        _view2.frame = CGRectMake(10, 10, 10, 10);
-        if (self.scrollType >= (1 << 20)) {
-            _view2.hidden = YES;
-        }
-        [self commonViewConfigure:_view2];
-    }
-    return _view2;
-}
-- (void)initView3{
-    if (!_view3) {
-        _view3 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
-        [self commonViewConfigure:_view3];
-        [self.scrollView addSubview:_view3];
-    }
-}
-- (void)commonViewConfigure:(ZHSimpleScrollContentView *)view{
-    view->_index = &_index;
-    view->_showIndex = &_showIndex;
-    view.numberOfRows= self.numberOfRows;
-    __weak typeof(self)weak_self = self;
-    view.viewForIndex = ^UIView *(NSInteger index){
-        return weak_self.viewForIndex ? weak_self.viewForIndex(index):nil;
-    };
-}
 
 - (UIScrollView *)scrollView{
     if (!_scrollView) {
@@ -80,6 +33,16 @@
         _scrollView.delegate      = self;
     }
     return _scrollView;
+}
+- (ZHSimpleAnimateContent *)scrollContainerView{
+    if (!_scrollContainerView) {
+        _scrollContainerView = [[ZHSimpleAnimateContent alloc] initWithScrollType:self.scrollType];
+        __weak typeof(self)weak_self = self;
+        _scrollContainerView.viewForIndex = ^UIView *(NSInteger index){
+            return weak_self.viewForIndex ? weak_self.viewForIndex(index):nil;
+        };
+    }
+    return _scrollContainerView;
 }
 - (UIView *)contentView{
     if (!_contentView) {
@@ -106,18 +69,6 @@
     [self addConstraints:HC];
     [self addConstraints:VC];
 }
-- (ZHWeakTimer *)timer{
-    if (!_timer) {
-        _timer = [ZHWeakTimer weakTimerWithTimeInterval:self.timeInterval target:self selector:@selector(autoAnimateDispatch) userInfo:nil repeats:YES];
-    }
-    return _timer;
-}
-- (void)invaliadTimer{
-    if (_timer) {
-        [_timer invaliadTimer];
-        _timer = nil;
-    }
-}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder{
     if (self = [super initWithCoder:aDecoder]) {
@@ -133,180 +84,50 @@
     }
     return self;
 }
+#pragma --mark--初始化--
 - (void)initDataWithType:(kMSimpleAnimateType)scrollType{
-    _index = -1;
 //    self.clipsToBounds          = YES;
     self.scrollView.clipsToBounds = NO;
     self.autoAnimate            = NO;
     self.timeInterval           = 3.0f;
     self.scrollType             = scrollType;
     self.numberOfRows           = 3;
+
     [self addSubview:self.scrollView];
     [self addFillConstraintWithView:self.scrollView];
-    if (self.scrollType < 20) {
-        [self initView3];
-    }
-    [self.scrollView addSubview:self.view2];
-    [self.scrollView addSubview:self.view1];
-    self.tmpView1 = self.view1;
-    self.tmpView2 = self.view2;
-    self.currentShowView = self.view1;
+    
+    [self.scrollView addSubview:self.scrollContainerView];
+    _scrollContainerView.backgroundColor = [UIColor purpleColor];
 }
 
 - (NSInteger)showIndex{
-    return _showIndex;
+    return self.scrollContainerView.showIndex;
 }
 - (UIView *)showView{
-    return self.currentShowView.tmpView;
+    return self.scrollContainerView.currentShowView.tmpView;
 }
 - (BOOL)isHorizontalDirect{
-    return (kMSimpleAnimateTypeL2R == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType);
+    return (kMSimpleAnimateTypeL2R == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType || kMSimpleAnimateTypeManualScroll == self.scrollType);
 }
 - (BOOL)isVerticalDirect{
-    return (kMSimpleAnimateTypeT2B == self.scrollType || kMSimpleAnimateTypeB2T == self.scrollType);
-}
-- (void)didMoveToWindow{
-    if (_index == -1) {
-        _index = 0;
-        [self.view1 getNewContentView];
-        [self.view2 getNewContentView];
-        if (self.autoAnimate) {
-            [self.timer fireTimer];
-        }
-        if (self.viewWillShow) {
-            self.viewWillShow(self.currentShowView.tmpView);
-        }
-    }
-    [super didMoveToWindow];
+    return (kMSimpleAnimateTypeT2B == self.scrollType || kMSimpleAnimateTypeB2T == self.scrollType || kMSimpleAnimateTypeManualScroll == self.scrollType);
 }
 
 - (void)next{
     [self nextWithAnimate:YES complete:nil];
 }
-- (void)autoAnimateDispatch{
-    [self nextWithAnimate:YES isauto:YES complete:nil];
-}
+
 - (void)nextWithAnimate:(BOOL)animate complete:(void (^)(BOOL))completeHandle{
     [self nextWithAnimate:animate isauto:NO complete:completeHandle];
 }
 - (void)nextWithAnimate:(BOOL)animate isauto:(BOOL)isAuto  complete:(void (^)(BOOL))completeHandle{
-    if (!self.view1.tmpView || !self.view2.tmpView) {//资源少于两个直接返回
-        NSLog(@"至少传入两个子view");
-        return;
-    }
-    if (self.isAminating) {
-        [self.view1.layer removeAllAnimations];
-        [self.view2.layer removeAllAnimations];
-    }
-    if (self.autoAnimate && !isAuto) {
-        [self invaliadTimer];
-    }
-    if ([self isHorizontalDirect] || [self isVerticalDirect]) {
-        self.isAminating = YES;
-        if (CGRectEqualToRect(self.view1.nextFrame, self.bounds)) {
-            self.currentShowView = self.view1;
-        }else if (CGRectEqualToRect(self.view2.nextFrame, self.bounds)){
-            self.currentShowView = self.view2;
-        }else if (CGRectEqualToRect(self.view3.nextFrame, self.bounds)){
-            self.currentShowView = self.view3;
-        }
-        if (self.viewWillShow) {
-            self.viewWillShow(self.currentShowView.tmpView);
-        }
-        if (animate) {
-            [UIView animateWithDuration:0.6 animations:^{
-                [self.view1 setFrame:self.view1.nextFrame];
-                [self.view2 setFrame:self.view2.nextFrame];
-                [self.view3 setFrame:self.view3.nextFrame];
-            } completion:^(BOOL finished) {
-                [self.view1 finishAnimation];
-                [self.view2 finishAnimation];
-                [self.view3 finishAnimation];
-                self.isAminating = NO;
-                if (self.autoAnimate && !isAuto) {
-                    [self.timer fireTimer];
-                }
-                if (self.viewDidShowAtIndex) {
-                    self.viewDidShowAtIndex(self.currentShowView.tmpView, self.showIndex);
-                }
-                if (completeHandle) {
-                    completeHandle(finished);
-                }
-            }];
-        }else{
-            [self.view1 setFrame:self.view1.nextFrame];
-            [self.view2 setFrame:self.view2.nextFrame];
-            [self.view1 finishAnimation];
-            [self.view2 finishAnimation];
-            if (self.autoAnimate && !isAuto) {
-                [self.timer fireTimer];
-            }
-            if (self.viewDidShowAtIndex) {
-                self.viewDidShowAtIndex(self.currentShowView.tmpView, self.showIndex);
-            }
-            if (completeHandle) {
-                completeHandle(YES);
-            }
-        }
-    }else if (self.scrollType >= (1 << 20)){
-        self.isAminating = YES;
-        NSTimeInterval duration     = animate ? 0.5 : 0;
-        UIViewAnimationOptions ops  = animate ? (self.scrollType|UIViewAnimationOptionShowHideTransitionViews):UIViewAnimationOptionShowHideTransitionViews;
-        self.currentShowView = self.tmpView2;
-        if (self.viewWillShow) {
-            self.viewWillShow(self.currentShowView);
-        }
-        [UIView transitionFromView:self.tmpView1 toView:self.tmpView2 duration:duration options:ops completion:^(BOOL finished) {
-            if (self.viewDidShowAtIndex) {
-                self.viewDidShowAtIndex(self.currentShowView.tmpView, self.showIndex);
-            }
-            [self.tmpView1 getNewContentView];
-            ZHSimpleScrollContentView *tmp     = self.tmpView1;
-            self.tmpView1  = self.tmpView2;
-            self.tmpView2  = tmp;
-            self.isAminating= NO;
-            if (self.autoAnimate && !isAuto) {
-                [self.timer fireTimer];
-            }
-            if (completeHandle) {
-                completeHandle(finished);
-            }
-        }];
-    }
+    [self.scrollContainerView nextWithAnimate:animate isauto:isAuto complete:completeHandle];
 }
 
 - (void)layoutSubviews{
-    if (self.view1.frame.size.width != self.frame.size.width || self.view1.frame.size.height != self.frame.size.height) {
+    if (self.scrollContainerView.frame.size.width != self.frame.size.width) {
+        self.scrollContainerView.frame = self.bounds;
         [self resetScrollViewContentSize];
-        [self.view1 setFrame:self.bounds];
-        [self.view1 nextFrameRecord];
-        [self.view1 layoutIfNeeded];
-        if (self.viewDidShowAtIndex) {
-            self.viewDidShowAtIndex(self.currentShowView.tmpView, self.showIndex);
-        }
-        if (kMSimpleAnimateTypeR2L == self.scrollType) {
-            [self.view2 setFrame:(CGRect){(CGPoint){self.frame.size.width,0},self.frame.size}];
-            [self.view2 nextFrameRecord];
-            [self.view3 setFrame:(CGRect){(CGPoint){-self.frame.size.width,0},self.frame.size}];
-            [self.view3 nextFrameRecord];
-        }else if (kMSimpleAnimateTypeL2R == self.scrollType){
-            [self.view2 setFrame:(CGRect){(CGPoint){-self.frame.size.width,0},self.frame.size}];
-            [self.view2 nextFrameRecord];
-            [self.view3 setFrame:(CGRect){(CGPoint){self.frame.size.width,0},self.frame.size}];
-            [self.view3 nextFrameRecord];
-        }else if (kMSimpleAnimateTypeB2T == self.scrollType){
-            [self.view2 setFrame:(CGRect){(CGPoint){0,self.frame.size.height},self.frame.size}];
-            [self.view2 nextFrameRecord];
-            [self.view3 setFrame:(CGRect){(CGPoint){0,-self.frame.size.height},self.frame.size}];
-            [self.view3 nextFrameRecord];
-        }else if (kMSimpleAnimateTypeT2B == self.scrollType){
-            [self.view2 setFrame:(CGRect){(CGPoint){0,-self.frame.size.height},self.frame.size}];
-            [self.view2 nextFrameRecord];
-            [self.view3 setFrame:(CGRect){(CGPoint){0,self.frame.size.height},self.frame.size}];
-            [self.view3 nextFrameRecord];
-        }else if (self.scrollType >= (1 << 20)){
-            self.view2.frame = self.view1.frame;
-        }
     }
     [super layoutSubviews];
 }
@@ -327,21 +148,21 @@
 
 #pragma --mark --scroolView delegate --
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    NSLog(@"%@|%@",NSStringFromCGRect([self.scrollView convertRect:self.view1.frame toView:self]),NSStringFromCGPoint(scrollView.contentOffset));
+//    NSLog(@"%@|%@",NSStringFromCGRect([self.scrollView convertRect:self.view1.frame toView:self]),NSStringFromCGPoint(scrollView.contentOffset));
+    CGRect contentFrame = self.scrollContainerView.frame;
     if ([self isHorizontalDirect]) {
         CGFloat width = self.frame.size.width;
         CGFloat offset = scrollView.contentOffset.x;
-        _showIndex = MAX(0, ((offset + 0.5*width)/width));
+        self.scrollContainerView.showIndex = MAX(0, ((offset + 0.5*width)/width));
+        self.scrollContainerView.frame = (CGRect){offset,contentFrame.origin.y,contentFrame.size};
         if (offset + width*0.5 < 0 ||  offset + width > width * self.numberOfRows) {return;}
     }else if ([self isVerticalDirect]){
         CGFloat height = self.frame.size.height;
         CGFloat offset = scrollView.contentOffset.y;
-        _showIndex = MAX(0, ((offset + 0.5*height)/height));
+        self.scrollContainerView.showIndex = MAX(0, ((offset + 0.5*height)/height));
+        self.scrollContainerView.frame = (CGRect){contentFrame.origin.x,offset,contentFrame.size};
         if (offset + height*0.5 < 0 || offset + height > height * self.numberOfRows) {return;}
     }
-    self.view1.realTimeRelativeFrame = [self.scrollView convertRect:self.view1.frame toView:self];
-    self.view2.realTimeRelativeFrame = [self.scrollView convertRect:self.view2.frame toView:self];
-    self.view3.realTimeRelativeFrame = [self.scrollView convertRect:self.view3.frame toView:self];
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
@@ -369,7 +190,6 @@
 
 - (void)dealloc
 {
-    [_timer invaliadTimer];
     NSLog(@"%s",__func__);
 }
 
@@ -377,12 +197,16 @@
 
 @implementation ZHSimpleAnimateView (ZHSimpleAnimateScroll)
 - (void)scrollToIndex:(NSInteger)index animate:(BOOL)animated{
-    [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width * index, 0)];
+    CGRect frame = self.scrollContainerView.frame;
+    frame.origin.x = self.scrollView.frame.size.width * (index - 1);
+    self.scrollContainerView.scrollTagetFrame = frame;
+    [self.scrollView setContentOffset:CGPointMake(frame.origin.x, 0) animated:NO];
+    [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width * index, 0) animated:animated];
 }
 
 - (void)setNumberOfRows:(NSUInteger)numberOfRows{
     if (numberOfRows > 0) {
-        self.view1.numberOfRows = self.view2.numberOfRows = self.view3.numberOfRows = numberOfRows;
+        self.scrollContainerView.numberOfRows = numberOfRows;
     }
     objc_setAssociatedObject(self, _cmd, [NSNumber numberWithUnsignedInteger:numberOfRows], OBJC_ASSOCIATION_ASSIGN);
 }

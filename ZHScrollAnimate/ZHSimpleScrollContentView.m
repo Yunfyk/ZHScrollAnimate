@@ -8,6 +8,12 @@
 
 #import "ZHSimpleScrollContentView.h"
 
+@interface ZHSimpleScrollContentView ()
+
+@property (assign, nonatomic) NSInteger bindIndex;
+
+@end
+
 @implementation ZHSimpleScrollContentView
 
 - (instancetype)initWithScrollType:(kMSimpleAnimateType)scrollType{
@@ -17,21 +23,28 @@
     return self;
 }
 
-- (void)setRealTimeRelativeFrame:(CGRect)realTimeRelativeFrame{
-    _realTimeRelativeFrame = realTimeRelativeFrame;
-    if (_realTimeRelativeFrame.origin.x < -self.frame.size.width * 1.5) {
-        self.center = CGPointMake(self.center.x + self.frame.size.width*3, self.center.y);
-        [self scrollToNewWithPlusValue:1];
-    }else if (_realTimeRelativeFrame.origin.x > self.frame.size.width * 1.5){
-        self.center = CGPointMake(self.center.x - self.frame.size.width*3, self.center.y);
-        [self scrollToNewWithPlusValue:-1];
-    }else if (_realTimeRelativeFrame.origin.y < -self.frame.size.height * 1.5){
-        self.center = CGPointMake(self.center.x, self.center.y + self.frame.size.height*3);
-        [self scrollToNewWithPlusValue:1];
-    }else if (_realTimeRelativeFrame.origin.y > self.frame.size.height * 1.5){
-        self.center = CGPointMake(self.center.x, self.center.y - self.frame.size.height*3);
-        [self scrollToNewWithPlusValue:-1];
+- (BOOL)isHorizontalDirect{
+    return (kMSimpleAnimateTypeL2R == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType || kMSimpleAnimateTypeManualScroll == self.scrollType);
+}
+- (BOOL)isVerticalDirect{
+    return (kMSimpleAnimateTypeT2B == self.scrollType || kMSimpleAnimateTypeB2T == self.scrollType || kMSimpleAnimateTypeManualScroll == self.scrollType);
+}
+
+- (void)setOffset:(CGFloat)offset{
+    CGRect frame = self.frame;
+    if ([self isHorizontalDirect]) {
+        frame.origin.x  += offset;
+        if (frame.origin.x < -self.frame.size.width * 1.5) {
+            frame.origin.x += self.frame.size.width * 3;
+            [self scrollToNewWithPlusValue:1];
+        }else if (frame.origin.x > self.frame.size.width * 1.5){
+            frame.origin.x -= self.frame.size.width * 3;
+            [self scrollToNewWithPlusValue:-1];
+        }
+    }else if ([self isVerticalDirect]){
+        frame.origin.y  += offset;
     }
+    self.frame = frame;
 }
 
 - (void)scrollToNewWithPlusValue:(NSInteger)plusValue{
@@ -45,6 +58,7 @@
         UIView *aView = self.viewForIndex(*_index);
         if (aView) {
             [self contentAddSubView:aView];
+            self.bindIndex = *_index;
         }
     }
 }
@@ -70,7 +84,7 @@
     }
 }
 - (void)nextFrameRecord{
-    if (self.scrollType == kMSimpleAnimateTypeR2L || self.scrollType == kMSimpleAnimateTypeL2R) {
+    if ([self isHorizontalDirect]) {
         CGFloat multipValue = self.scrollType == kMSimpleAnimateTypeR2L ? 1.0 : -1.0;
         if (self.frame.origin.x == -2 * multipValue * self.frame.size.width) {
             self.nextFrame = (CGRect){(CGPoint){multipValue * self.frame.size.width,0},self.frame.size};
@@ -83,7 +97,7 @@
         }else if (self.frame.origin.x == 2 * multipValue * self.frame.size.width){
             self.nextFrame = (CGRect){(CGPoint){-multipValue * self.frame.size.width,0},self.frame.size};
         }
-    }else if (self.scrollType == kMSimpleAnimateTypeB2T || self.scrollType == kMSimpleAnimateTypeT2B){
+    }else if ([self isVerticalDirect]){
         CGFloat multipValue = self.scrollType == kMSimpleAnimateTypeB2T ? 1.0 : -1.0;
         if (self.frame.origin.y == -2 * multipValue * self.frame.size.height) {
             self.nextFrame = (CGRect){(CGPoint){0,multipValue * self.frame.size.height},self.frame.size};
@@ -142,6 +156,7 @@
         UIView *aView = self.viewForIndex(*_index);
         if (aView) {
             [self contentAddSubView:aView];
+            self.bindIndex = *_index;
             *_index = *_index + 1;
         }
     }

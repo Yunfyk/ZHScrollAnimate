@@ -13,6 +13,7 @@ typedef enum : NSUInteger {
     kMSimpleAnimateTypeL2R,             //左向右动画
     kMSimpleAnimateTypeB2T,             //下向上动画
     kMSimpleAnimateTypeT2B,             //上向下动画
+    kMSimpleAnimateTypeManualScroll,    //手动滑动
     
     kMSimpleAnimateTypeFlipFromLeft = UIViewAnimationOptionTransitionFlipFromLeft,     //左向右翻转
     kMSimpleAnimateTypeFlipFromRight= UIViewAnimationOptionTransitionFlipFromRight,    //右向左翻转
@@ -39,7 +40,7 @@ typedef UIView *(^viewForIndexBlock)(NSInteger index);
 
 @property (nonatomic, copy)   viewForIndexBlock             viewForIndex;
 
-@property (nonatomic, assign) CGRect                        realTimeRelativeFrame;
+@property (nonatomic, assign) CGFloat                       offset;
 
 - (instancetype)initWithScrollType:(kMSimpleAnimateType)scrollType;
 

@@ -44,9 +44,9 @@
     self.scrollView.numberOfRows = 10;
     __weak typeof(self)wkSelf = self;
     self.scrollView.viewForIndex = ^UIView *(NSInteger index){
-//        NSLog(@"%ld | showIndex : %ld",index,wkSelf.scrollView.showIndex);
+        NSLog(@"%ld | showIndex : %ld",index,wkSelf.scrollView.showIndex);
         UILabel *label = [[UILabel alloc] init];
-        label.backgroundColor = [UIColor colorWithRed:(arc4random()%100+100)/255.0 green:0.3 blue:0.3 alpha:1];
+//        label.backgroundColor = [UIColor colorWithRed:(arc4random()%100+100)/255.0 green:0.3 blue:0.3 alpha:1];
         label.textColor = [UIColor whiteColor];
         label.textAlignment = NSTextAlignmentCenter;
         label.text = wkSelf.names[index%wkSelf.names.count];
@@ -70,7 +70,7 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [self.scrollView scrollToIndex:5 animate:YES];
+    [self.scrollView scrollToIndex:7 animate:YES];
 }
 
 - (IBAction)next {
