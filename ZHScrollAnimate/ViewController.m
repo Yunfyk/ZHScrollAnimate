@@ -49,7 +49,7 @@
 //        label.backgroundColor = [UIColor colorWithRed:(arc4random()%100+100)/255.0 green:0.3 blue:0.3 alpha:1];
         label.textColor = [UIColor whiteColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = wkSelf.names[index%wkSelf.names.count];
+        label.text = [NSString stringWithFormat:@"%@[%ld]",wkSelf.names[index%wkSelf.names.count],index];
         return label;
     };
     
@@ -68,9 +68,13 @@
     // Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    [self.scrollView scrollToIndex:7 animate:YES];
+//- (void)viewDidAppear:(BOOL)animated{
+//    [super viewDidAppear:animated];
+//    [self.scrollView scrollToIndex:7 animate:YES];
+//}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [self.scrollView scrollToIndex:arc4random()%10 animate:YES];
 }
 
 - (IBAction)next {

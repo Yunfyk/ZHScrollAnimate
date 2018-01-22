@@ -139,6 +139,12 @@
     [super setFrame:scrollTagetFrame];
 }
 
+- (void)updateContentView{
+    [_view1 updateContentView];
+    [_view2 updateContentView];
+    [_view3 updateContentView];
+}
+
 - (void)autoAnimateDispatch{
     [self nextWithAnimate:YES isauto:YES complete:nil];
 }

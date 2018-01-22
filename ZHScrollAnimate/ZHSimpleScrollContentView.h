@@ -46,6 +46,8 @@ typedef UIView *(^viewForIndexBlock)(NSInteger index);
 
 - (void)getNewContentView;
 
+- (void)updateContentView;
+
 - (void)nextFrameRecord;
 
 //animate finished and condition for record next frame

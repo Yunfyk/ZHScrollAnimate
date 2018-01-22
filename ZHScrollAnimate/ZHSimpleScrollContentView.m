@@ -36,29 +36,54 @@
         frame.origin.x  += offset;
         if (frame.origin.x < -self.frame.size.width * 1.5) {
             frame.origin.x += self.frame.size.width * 3;
+            self.hidden = YES;
             [self scrollToNewWithPlusValue:1];
         }else if (frame.origin.x > self.frame.size.width * 1.5){
             frame.origin.x -= self.frame.size.width * 3;
+            self.hidden = YES;
             [self scrollToNewWithPlusValue:-1];
-        }
+        }else{if (self.hidden) {self.hidden = NO;}}
     }else if ([self isVerticalDirect]){
         frame.origin.y  += offset;
     }
     self.frame = frame;
 }
+- (void)updateContentView{
+    if (self.frame.origin.x < 0 || self.frame.origin.y < 0) {
+        if (self.bindIndex != *_showIndex - 1) {
+            [self setupNewViewWithIndex:*_showIndex - 1];
+        }
+    }else if (self.frame.origin.x > 0 || self.frame.origin.y > 0){
+        if (self.bindIndex != *_showIndex + 1) {
+            [self setupNewViewWithIndex:*_showIndex + 1];
+        }
+    }else{
+        if (self.frame.origin.x == 0 && self.frame.origin.y == 0) {
+            if (*_showIndex != self.bindIndex) {
+                [self setupNewViewWithIndex:*_showIndex];
+            }
+        }
+    }
+}
 
 - (void)scrollToNewWithPlusValue:(NSInteger)plusValue{
 //    if (*_showIndex <= 0) {return;}
+    if (self.superview) {[self.superview sendSubviewToBack:self];}
     if (*_showIndex + plusValue < 0 || *_showIndex + plusValue > self.numberOfRows - 1) {
         [self.tmpView removeFromSuperview];return;
     }
-    if (self.hidden) {self.hidden = NO;}
+//    if (self.hidden) {self.hidden = NO;}
     *_index = *_showIndex + plusValue;
+    [self setupNewViewWithIndex:*_index];
+}
+
+- (void)setupNewViewWithIndex:(NSInteger)index{
+    if (index < 0 || index >= self.numberOfRows) {[self.tmpView removeFromSuperview];return;}
     if (self.viewForIndex) {
-        UIView *aView = self.viewForIndex(*_index);
+        UIView *aView = self.viewForIndex(index);
         if (aView) {
             [self contentAddSubView:aView];
-            self.bindIndex = *_index;
+            self.bindIndex = index;
         }
     }
 }

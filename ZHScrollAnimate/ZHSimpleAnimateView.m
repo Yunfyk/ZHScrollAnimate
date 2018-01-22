@@ -197,11 +197,19 @@
 
 @implementation ZHSimpleAnimateView (ZHSimpleAnimateScroll)
 - (void)scrollToIndex:(NSInteger)index animate:(BOOL)animated{
+//    if (self.scrollView.dragging || self.scrollView.decelerating || self.scrollView.tracking) {return;}
+    if (self.scrollContainerView.showIndex == index) {return;}
     CGRect frame = self.scrollContainerView.frame;
-    frame.origin.x = self.scrollView.frame.size.width * (index - 1);
+    NSInteger loopIndex = self.scrollContainerView.showIndex < index ? index - 1 : index + 1;
+    frame.origin.x = MAX(0, self.scrollView.frame.size.width * (loopIndex));
     self.scrollContainerView.scrollTagetFrame = frame;
     [self.scrollView setContentOffset:CGPointMake(frame.origin.x, 0) animated:NO];
-    [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width * index, 0) animated:animated];
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width * index, 0)];
+    } completion:^(BOOL finished) {
+        [self.scrollContainerView updateContentView];
+    }];
+//    [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width * index, 0) animated:animated];
 }
 
 - (void)setNumberOfRows:(NSUInteger)numberOfRows{
