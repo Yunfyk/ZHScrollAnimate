@@ -204,10 +204,11 @@
     frame.origin.x = MAX(0, self.scrollView.frame.size.width * (loopIndex));
     self.scrollContainerView.scrollTagetFrame = frame;
     [self.scrollView setContentOffset:CGPointMake(frame.origin.x, 0) animated:NO];
+    [self.scrollContainerView updateContentView];
     [UIView animateWithDuration:0.3 animations:^{
         [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width * index, 0)];
     } completion:^(BOOL finished) {
-        [self.scrollContainerView updateContentView];
+        
     }];
 //    [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width * index, 0) animated:animated];
 }

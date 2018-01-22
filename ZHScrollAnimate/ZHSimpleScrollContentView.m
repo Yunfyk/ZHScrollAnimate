@@ -79,6 +79,9 @@
 
 - (void)setupNewViewWithIndex:(NSInteger)index{
     if (index < 0 || index >= self.numberOfRows) {[self.tmpView removeFromSuperview];return;}
+    if (self.bindIndex == index) {
+        return;
+    }
     if (self.viewForIndex) {
         UIView *aView = self.viewForIndex(index);
         if (aView) {
