@@ -101,6 +101,7 @@
 }
 
 - (void)scrollToNewWithPlusValue:(NSInteger)plusValue{
+    if (*_showIndex >= self.numberOfRows || *_showIndex < 0) {return;}
     if (self.superview) {[self.superview sendSubviewToBack:self];}
     if (*_showIndex + plusValue < 0 || *_showIndex + plusValue > self.numberOfRows - 1) {
         [self.tmpView removeFromSuperview];self.bindIndex = -10;return;
@@ -206,10 +207,18 @@
             if (CGRectEqualToRect(self.frame, self.superview.bounds)) {
                 *_showIndex = *_index;
             }else{
-                *_showIndex = MAX(0, *_index - 1);
+                if (*_index == 0 && *_showIndex > 0) {
+                    *_showIndex = self.numberOfRows - 1;
+                }else{
+                    *_showIndex = MAX(0, *_index - 1);
+                }
             }
         }else{
-            *_showIndex      = *_index < 1 ? 0 : *_index - 1;
+            if (*_index == 0 && *_showIndex > 0) {
+                *_showIndex = self.numberOfRows - 1;
+            }else{
+                *_showIndex      = *_index < 1 ? 0 : *_index - 1;
+            }
         }
         UIView *aView = self.viewForIndex(*_index);
         if (aView) {

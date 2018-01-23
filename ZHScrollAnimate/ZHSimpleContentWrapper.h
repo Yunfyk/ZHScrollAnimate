@@ -1,5 +1,5 @@
 //
-//  ZHSimpleAnimateContent.h
+//  ZHSimpleContentWrapper.h
 //  ZHScrollAnimate
 //
 //  Created by zhusanbao on 2018/1/21.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ZHSimpleScrollContentView.h"
 
-@interface ZHSimpleAnimateContent : UIView
+@interface ZHSimpleContentWrapper : UIView
 
 @property (nonatomic, copy)   UIView *(^viewForIndex)(NSInteger index);
 @property (assign, nonatomic) NSUInteger                    numberOfRows;

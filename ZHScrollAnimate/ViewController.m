@@ -26,11 +26,10 @@
     self.names = @[@"人生若只如初见",@"何事秋风悲画扇",@"等闲变却故人心",@"却道故人心易变",@"骊山语罢清宵半",@"泪雨霖铃终不怨",@"何如薄幸锦衣郎",@"比翼连枝当日愿"];
     
     self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeB2T];
-//    self.scrollView.scrollEnable = YES;
+    self.scrollView.scrollEnable = YES;
 //    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeCurlUp];
-    self.scrollView.autoAnimate     = YES;
-    self.scrollView.timeInterval    = 1;
-    //    self.scrollView.frame = CGRectMake(80, 80, 200, 30);
+//    self.scrollView.autoAnimate     = YES;
+    self.scrollView.timeInterval    = 2;
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.scrollView];
     self.scrollView.backgroudImageView.contentMode = UIViewContentModeScaleAspectFill;

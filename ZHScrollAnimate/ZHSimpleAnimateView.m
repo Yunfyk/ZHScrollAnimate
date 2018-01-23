@@ -9,13 +9,13 @@
 #import "ZHSimpleAnimateView.h"
 #import "ZHWeakTimer.h"
 #import <objc/runtime.h>
-#import "ZHSimpleAnimateContent.h"
+#import "ZHSimpleContentWrapper.h"
 
 @interface ZHSimpleAnimateView()<UIScrollViewDelegate>
 
 @property (nonatomic, assign) kMSimpleAnimateType           scrollType;
 @property (nonatomic, strong) UIScrollView                  *scrollView;//三个view的容器
-@property (strong, nonatomic) ZHSimpleAnimateContent        *scrollContainerView;
+@property (strong, nonatomic) ZHSimpleContentWrapper        *scrollContainerView;
 @property (nonatomic, weak)   ZHSimpleScrollContentView     *currentShowView;
 
 @end
@@ -34,9 +34,9 @@
     }
     return _scrollView;
 }
-- (ZHSimpleAnimateContent *)scrollContainerView{
+- (ZHSimpleContentWrapper *)scrollContainerView{
     if (!_scrollContainerView) {
-        _scrollContainerView = [[ZHSimpleAnimateContent alloc] initWithScrollType:self.scrollType];
+        _scrollContainerView = [[ZHSimpleContentWrapper alloc] initWithScrollType:self.scrollType];
         __weak typeof(self)weak_self = self;
         _scrollContainerView.viewForIndex = ^UIView *(NSInteger index){
             return weak_self.viewForIndex ? weak_self.viewForIndex(index):nil;
@@ -97,7 +97,6 @@
     [self addFillConstraintWithView:self.scrollView];
     
     [self.scrollView addSubview:self.scrollContainerView];
-//    _scrollContainerView.backgroundColor = [UIColor purpleColor];
 }
 
 - (void)setAutoAnimate:(BOOL)autoAnimate{
@@ -249,7 +248,7 @@
     return [objc_getAssociatedObject(self, @selector(setNumberOfRows:)) unsignedIntegerValue];
 }
 - (void)setScrollEnable:(BOOL)scrollEnable{
-    if (scrollEnable && (![self isHorizontalDirect] || ![self isVerticalDirect])) {
+    if (scrollEnable && (![self isHorizontalDirect] && ![self isVerticalDirect])) {
         NSLog(@"assigned scroll type not valiad");return;
     }
     self.scrollView.scrollEnabled = scrollEnable;
@@ -259,5 +258,23 @@
     return self.scrollView.scrollEnabled;
 }
 
+- (void)setShowsVerticalScrollIndicator:(BOOL)showsVerticalScrollIndicator{
+    self.scrollView.showsVerticalScrollIndicator = showsVerticalScrollIndicator;
+}
+- (BOOL)showsVerticalScrollIndicator{
+    return self.scrollView.showsVerticalScrollIndicator;
+}
+- (void)setShowsHorizontalScrollIndicator:(BOOL)showsHorizontalScrollIndicator{
+    self.scrollView.showsHorizontalScrollIndicator = showsHorizontalScrollIndicator;
+}
+- (BOOL)showsHorizontalScrollIndicator{
+    return self.scrollView.showsHorizontalScrollIndicator;
+}
+- (void)setBounces:(BOOL)bounces{
+    self.scrollView.bounces = bounces;
+}
+- (BOOL)bounces{
+    return self.scrollView.bounces;
+}
 @end
 

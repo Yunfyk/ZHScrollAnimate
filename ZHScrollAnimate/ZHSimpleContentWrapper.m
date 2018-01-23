@@ -1,15 +1,15 @@
 //
-//  ZHSimpleAnimateContent.m
+//  ZHSimpleContentWrapper.m
 //  ZHScrollAnimate
 //
 //  Created by zhusanbao on 2018/1/21.
 //  Copyright © 2018年 zhusanbao. All rights reserved.
 //
 
-#import "ZHSimpleAnimateContent.h"
+#import "ZHSimpleContentWrapper.h"
 #import "ZHWeakTimer.h"
 
-@interface ZHSimpleAnimateContent ()
+@interface ZHSimpleContentWrapper ()
 
 @property (nonatomic, strong) ZHSimpleScrollContentView     *view1;
 @property (nonatomic, strong) ZHSimpleScrollContentView     *view2;
@@ -25,7 +25,7 @@
 
 @end
 
-@implementation ZHSimpleAnimateContent
+@implementation ZHSimpleContentWrapper
 @synthesize view3=_view3;
 
 - (ZHSimpleScrollContentView *)view1{

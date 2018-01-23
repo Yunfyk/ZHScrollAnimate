@@ -47,9 +47,14 @@
 @interface ZHSimpleAnimateView (ZHSimpleAnimateScroll)
 
 /** scroll Enable only for R2L,L2R,B2T,T2B types */
-@property (nonatomic, assign) BOOL          scrollEnable;
+@property (nonatomic, assign) BOOL                        scrollEnable;
 /** count of rows */
-@property (nonatomic, assign) NSUInteger    numberOfRows;
+@property (nonatomic, assign) NSUInteger                  numberOfRows;
+
+@property(nonatomic)         BOOL                         showsHorizontalScrollIndicator; // default YES. show indicator while we are tracking. fades out after tracking
+@property(nonatomic)         BOOL                         showsVerticalScrollIndicator;   // default
+@property(nonatomic)         BOOL                         bounces;                        // default YES. if YES, bounces past edge of content and back again
+
 /** scroll to assigned index */
 - (void)scrollToIndex:(NSInteger)index animate:(BOOL)animated;
 
