@@ -12,6 +12,13 @@
 
 @property (assign, nonatomic) NSInteger bindIndex;
 
+@property (nonatomic, assign) CGFloat   z_x;
+@property (nonatomic, assign) CGFloat   z_y;
+@property (nonatomic, assign) CGFloat   z_width;
+@property (nonatomic, assign) CGFloat   z_height;
+//目标位置位置
+@property (nonatomic, assign) CGRect    targetFrame;
+
 @end
 
 @implementation ZHSimpleScrollContentView
@@ -24,64 +31,87 @@
 }
 
 - (BOOL)isHorizontalDirect{
-    return (kMSimpleAnimateTypeL2R == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType || kMSimpleAnimateTypeManualScroll == self.scrollType);
+    return (kMSimpleAnimateTypeL2R == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType);
 }
 - (BOOL)isVerticalDirect{
-    return (kMSimpleAnimateTypeT2B == self.scrollType || kMSimpleAnimateTypeB2T == self.scrollType || kMSimpleAnimateTypeManualScroll == self.scrollType);
+    return (kMSimpleAnimateTypeT2B == self.scrollType || kMSimpleAnimateTypeB2T == self.scrollType);
 }
+- (CGFloat)z_x{     return      self.frame.origin.x;}
+- (CGFloat)z_y{     return      self.frame.origin.y;}
+- (CGFloat)z_width{ return      self.frame.size.width;}
+- (CGFloat)z_height{return      self.frame.size.height;};
+
+- (void)setZ_x:(CGFloat)z_x{CGRect frame = self.frame;frame.origin.x = z_x;self.frame = frame;}
+- (void)setZ_y:(CGFloat)z_y{CGRect frame = self.frame;frame.origin.y = z_y;self.frame = frame;}
+- (void)setZ_width:(CGFloat)z_width{CGRect frame = self.frame;frame.size.width = z_width;self.frame = frame;}
+- (void)setZ_height:(CGFloat)z_height{CGRect frame = self.frame;frame.size.height = z_height;self.frame = frame;}
+
+- (BOOL)isInLeftOrTopSide{      return (self.z_x < 0 || self.z_y < 0);}
+- (BOOL)isInMiddleSide{         return (self.z_x == 0 && self.z_y == 0);}
+- (BOOL)isInRightOrBottomSide{  return (self.z_x > 0 || self.z_y > 0);}
 
 - (void)setOffset:(CGFloat)offset{
     CGRect frame = self.frame;
     if ([self isHorizontalDirect]) {
         frame.origin.x  += offset;
-        if (frame.origin.x < -self.frame.size.width * 1.5) {
-            frame.origin.x += self.frame.size.width * 3;
+        if (frame.origin.x < -self.z_width * 1.5) {
+            frame.origin.x += self.z_width * 3;
             self.hidden = YES;
             [self scrollToNewWithPlusValue:1];
-        }else if (frame.origin.x > self.frame.size.width * 1.5){
-            frame.origin.x -= self.frame.size.width * 3;
+        }else if (frame.origin.x > self.z_width * 1.5){
+            frame.origin.x -= self.z_width * 3;
+            self.hidden = YES;
+            [self scrollToNewWithPlusValue:-1];
+        }else{if (self.hidden) {
+            self.hidden = NO;
+        }}
+    }else if ([self isVerticalDirect]){
+        frame.origin.y  += offset;
+        if (frame.origin.y < -self.z_height * 1.5) {
+            frame.origin.y += self.z_height * 3;
+            self.hidden = YES;
+            [self scrollToNewWithPlusValue:1];
+        }else if (frame.origin.y > self.z_height * 1.5){
+            frame.origin.y -= self.z_height * 3;
             self.hidden = YES;
             [self scrollToNewWithPlusValue:-1];
         }else{if (self.hidden) {self.hidden = NO;}}
-    }else if ([self isVerticalDirect]){
-        frame.origin.y  += offset;
     }
     self.frame = frame;
 }
 - (void)updateContentView{
-    if (self.frame.origin.x < 0 || self.frame.origin.y < 0) {
+    if ([self isInLeftOrTopSide]) {
         if (self.bindIndex != *_showIndex - 1) {
             [self setupNewViewWithIndex:*_showIndex - 1];
         }
-    }else if (self.frame.origin.x > 0 || self.frame.origin.y > 0){
+    }else if ([self isInRightOrBottomSide]){
         if (self.bindIndex != *_showIndex + 1) {
             [self setupNewViewWithIndex:*_showIndex + 1];
         }
     }else{
-        if (self.frame.origin.x == 0 && self.frame.origin.y == 0) {
+        if ([self isInMiddleSide]) {
             if (*_showIndex != self.bindIndex) {
                 [self setupNewViewWithIndex:*_showIndex];
             }
         }
     }
 }
+- (void)adjustFrameSize{
+    
+}
 
 - (void)scrollToNewWithPlusValue:(NSInteger)plusValue{
-//    if (*_showIndex <= 0) {return;}
     if (self.superview) {[self.superview sendSubviewToBack:self];}
     if (*_showIndex + plusValue < 0 || *_showIndex + plusValue > self.numberOfRows - 1) {
-        [self.tmpView removeFromSuperview];return;
+        [self.tmpView removeFromSuperview];self.bindIndex = -10;return;
     }
-//    if (self.hidden) {self.hidden = NO;}
     *_index = *_showIndex + plusValue;
     [self setupNewViewWithIndex:*_index];
 }
 
 - (void)setupNewViewWithIndex:(NSInteger)index{
-    if (index < 0 || index >= self.numberOfRows) {[self.tmpView removeFromSuperview];return;}
-    if (self.bindIndex == index) {
-        return;
-    }
+    if (index < 0 || index > self.numberOfRows - 1) {[self.tmpView removeFromSuperview];self.bindIndex = -10;return;}
+    if (self.bindIndex == index) {return;}
     if (self.viewForIndex) {
         UIView *aView = self.viewForIndex(index);
         if (aView) {
@@ -114,29 +144,29 @@
 - (void)nextFrameRecord{
     if ([self isHorizontalDirect]) {
         CGFloat multipValue = self.scrollType == kMSimpleAnimateTypeR2L ? 1.0 : -1.0;
-        if (self.frame.origin.x == -2 * multipValue * self.frame.size.width) {
-            self.nextFrame = (CGRect){(CGPoint){multipValue * self.frame.size.width,0},self.frame.size};
-        }else if (self.frame.origin.x == -multipValue * self.frame.size.width){
-            self.nextFrame = (CGRect){(CGPoint){-2 * multipValue * self.frame.size.width,0},self.frame.size};
-        }else if (self.frame.origin.x == 0){
-            self.nextFrame = (CGRect){(CGPoint){-multipValue * self.frame.size.width,0},self.frame.size};
-        }else if (self.frame.origin.x == multipValue * self.frame.size.width){
+        if (self.z_x == -2 * multipValue * self.z_width) {
+            self.nextFrame = (CGRect){(CGPoint){multipValue * self.z_width,0},self.frame.size};
+        }else if (self.z_x == -multipValue * self.z_width){
+            self.nextFrame = (CGRect){(CGPoint){-2 * multipValue * self.z_width,0},self.frame.size};
+        }else if (self.z_x == 0){
+            self.nextFrame = (CGRect){(CGPoint){-multipValue * self.z_width,0},self.frame.size};
+        }else if (self.z_x == multipValue * self.z_width){
             self.nextFrame = (CGRect){(CGPoint){0,0},self.frame.size};
-        }else if (self.frame.origin.x == 2 * multipValue * self.frame.size.width){
-            self.nextFrame = (CGRect){(CGPoint){-multipValue * self.frame.size.width,0},self.frame.size};
+        }else if (self.z_x == 2 * multipValue * self.z_width){
+            self.nextFrame = (CGRect){(CGPoint){-multipValue * self.z_width,0},self.frame.size};
         }
     }else if ([self isVerticalDirect]){
         CGFloat multipValue = self.scrollType == kMSimpleAnimateTypeB2T ? 1.0 : -1.0;
-        if (self.frame.origin.y == -2 * multipValue * self.frame.size.height) {
-            self.nextFrame = (CGRect){(CGPoint){0,multipValue * self.frame.size.height},self.frame.size};
-        }else if (self.frame.origin.y == -multipValue * self.frame.size.height){
-            self.nextFrame = (CGRect){(CGPoint){0,-2 * multipValue * self.frame.size.height},self.frame.size};
-        }else if (self.frame.origin.y == 0){
-            self.nextFrame = (CGRect){(CGPoint){0,-multipValue * self.frame.size.height},self.frame.size};
-        }else if (self.frame.origin.y == multipValue * self.frame.size.height){
+        if (self.z_y == -2 * multipValue * self.z_height) {
+            self.nextFrame = (CGRect){(CGPoint){0,multipValue * self.z_height},self.frame.size};
+        }else if (self.z_y == -multipValue * self.z_height){
+            self.nextFrame = (CGRect){(CGPoint){0,-2 * multipValue * self.z_height},self.frame.size};
+        }else if (self.z_y == 0){
+            self.nextFrame = (CGRect){(CGPoint){0,-multipValue * self.z_height},self.frame.size};
+        }else if (self.z_y == multipValue * self.z_height){
             self.nextFrame = (CGRect){(CGPoint){0,0},self.frame.size};
-        }else if (self.frame.origin.y == 2 * multipValue * self.frame.size.height){
-            self.nextFrame = (CGRect){(CGPoint){0,-multipValue * self.frame.size.height},self.frame.size};
+        }else if (self.z_y == 2 * multipValue * self.z_height){
+            self.nextFrame = (CGRect){(CGPoint){0,-multipValue * self.z_height},self.frame.size};
         }
     }
 }
@@ -144,25 +174,25 @@
 - (void)finishAnimation{
     [self nextFrameRecord];
     if (self.scrollType == kMSimpleAnimateTypeR2L) {
-        if (self.frame.origin.x == -2 * self.frame.size.width) {
+        if (self.z_x == -2 * self.z_width) {
             [self setFrame:self.nextFrame];
             [self getNewContentView];
             [self nextFrameRecord];
         }
     }else if (kMSimpleAnimateTypeL2R == self.scrollType){
-        if (self.frame.origin.x == 2 * self.frame.size.width) {
+        if (self.z_x == 2 * self.z_width) {
             [self setFrame:self.nextFrame];
             [self getNewContentView];
             [self nextFrameRecord];
         }
     }else if (self.scrollType == kMSimpleAnimateTypeB2T){
-        if (self.frame.origin.y == -2 * self.frame.size.height) {
+        if (self.z_y == -2 * self.z_height) {
             [self setFrame:self.nextFrame];
             [self getNewContentView];
             [self nextFrameRecord];
         }
     }else if (self.scrollType == kMSimpleAnimateTypeT2B){
-        if (self.frame.origin.y == 2 * self.frame.size.height) {
+        if (self.z_y == 2 * self.z_height) {
             [self setFrame:self.nextFrame];
             [self getNewContentView];
             [self nextFrameRecord];
@@ -185,7 +215,11 @@
         if (aView) {
             [self contentAddSubView:aView];
             self.bindIndex = *_index;
-            *_index = *_index + 1;
+            if (self.numberOfRows > 0 && *_index >= self.numberOfRows - 1) {
+                *_index = 0;
+            }else{
+                *_index = *_index + 1;
+            }
         }
     }
 }

@@ -25,11 +25,11 @@
     
     self.names = @[@"人生若只如初见",@"何事秋风悲画扇",@"等闲变却故人心",@"却道故人心易变",@"骊山语罢清宵半",@"泪雨霖铃终不怨",@"何如薄幸锦衣郎",@"比翼连枝当日愿"];
     
-    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeR2L];
-    self.scrollView.scrollEnable = YES;
+    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeB2T];
+//    self.scrollView.scrollEnable = YES;
 //    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeCurlUp];
-//    self.scrollView.autoAnimate     = YES;
-    self.scrollView.timeInterval    = 4;
+    self.scrollView.autoAnimate     = YES;
+    self.scrollView.timeInterval    = 1;
     //    self.scrollView.frame = CGRectMake(80, 80, 200, 30);
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.scrollView];
@@ -68,12 +68,11 @@
     // Do any additional setup after loading the view, typically from a nib.
 }
 
-//- (void)viewDidAppear:(BOOL)animated{
-//    [super viewDidAppear:animated];
-//    [self.scrollView scrollToIndex:7 animate:YES];
-//}
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+//    [self.scrollView scrollToIndex:arc4random()%10 animate:YES];
+//}
+- (IBAction)randomScroll:(id)sender {
     [self.scrollView scrollToIndex:arc4random()%10 animate:YES];
 }
 

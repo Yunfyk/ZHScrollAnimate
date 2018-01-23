@@ -33,5 +33,7 @@
 - (instancetype)initWithScrollType:(kMSimpleAnimateType)scrollType;
 
 - (void)nextWithAnimate:(BOOL)animate isauto:(BOOL)isAuto complete:(void (^)(BOOL))completeHandle;
+////滑动结束调整frame
+//- (void)adjustFrameSize;
 
 @end

@@ -101,10 +101,10 @@
 }
 
 - (BOOL)isHorizontalDirect{
-    return (kMSimpleAnimateTypeL2R == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType || kMSimpleAnimateTypeManualScroll == self.scrollType);
+    return (kMSimpleAnimateTypeL2R == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType);
 }
 - (BOOL)isVerticalDirect{
-    return (kMSimpleAnimateTypeT2B == self.scrollType || kMSimpleAnimateTypeB2T == self.scrollType || kMSimpleAnimateTypeManualScroll == self.scrollType);
+    return (kMSimpleAnimateTypeT2B == self.scrollType || kMSimpleAnimateTypeB2T == self.scrollType);
 }
 
 - (void)didMoveToWindow{
@@ -144,6 +144,10 @@
     [_view2 updateContentView];
     [_view3 updateContentView];
 }
+
+//- (void)adjustFrameSize{
+//    
+//}
 
 - (void)autoAnimateDispatch{
     [self nextWithAnimate:YES isauto:YES complete:nil];

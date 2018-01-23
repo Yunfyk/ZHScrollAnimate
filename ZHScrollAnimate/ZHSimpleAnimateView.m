@@ -26,7 +26,7 @@
 - (UIScrollView *)scrollView{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] init];
-        _scrollView.scrollEnabled = YES;
+        _scrollView.scrollEnabled = NO;
 //        _scrollView.pagingEnabled = YES;
 //        _scrollView.bounces       = NO;
 //        _scrollView.decelerationRate = 0.01;
@@ -86,18 +86,31 @@
 }
 #pragma --mark--初始化--
 - (void)initDataWithType:(kMSimpleAnimateType)scrollType{
-//    self.clipsToBounds          = YES;
+    self.clipsToBounds          = YES;
+    self.scrollType             = scrollType;
     self.scrollView.clipsToBounds = NO;
     self.autoAnimate            = NO;
     self.timeInterval           = 3.0f;
-    self.scrollType             = scrollType;
     self.numberOfRows           = 3;
 
     [self addSubview:self.scrollView];
     [self addFillConstraintWithView:self.scrollView];
     
     [self.scrollView addSubview:self.scrollContainerView];
-    _scrollContainerView.backgroundColor = [UIColor purpleColor];
+//    _scrollContainerView.backgroundColor = [UIColor purpleColor];
+}
+
+- (void)setAutoAnimate:(BOOL)autoAnimate{
+    self.scrollContainerView.autoAnimate = autoAnimate;
+}
+- (BOOL)autoAnimate{
+    return self.scrollContainerView.autoAnimate;
+}
+- (void)setTimeInterval:(NSTimeInterval)timeInterval{
+    self.scrollContainerView.timeInterval = timeInterval;
+}
+- (NSTimeInterval)timeInterval{
+    return self.scrollContainerView.timeInterval;
 }
 
 - (NSInteger)showIndex{
@@ -107,10 +120,10 @@
     return self.scrollContainerView.currentShowView.tmpView;
 }
 - (BOOL)isHorizontalDirect{
-    return (kMSimpleAnimateTypeL2R == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType || kMSimpleAnimateTypeManualScroll == self.scrollType);
+    return (kMSimpleAnimateTypeL2R == self.scrollType || kMSimpleAnimateTypeR2L == self.scrollType);
 }
 - (BOOL)isVerticalDirect{
-    return (kMSimpleAnimateTypeT2B == self.scrollType || kMSimpleAnimateTypeB2T == self.scrollType || kMSimpleAnimateTypeManualScroll == self.scrollType);
+    return (kMSimpleAnimateTypeT2B == self.scrollType || kMSimpleAnimateTypeB2T == self.scrollType);
 }
 
 - (void)next{
@@ -121,6 +134,7 @@
     [self nextWithAnimate:animate isauto:NO complete:completeHandle];
 }
 - (void)nextWithAnimate:(BOOL)animate isauto:(BOOL)isAuto  complete:(void (^)(BOOL))completeHandle{
+    if (self.scrollEnable) {NSLog(@"滚动模式下(scrollEnable = YES)不支持next api, 请使用scrollToIndex:animate"); return;}
     [self.scrollContainerView nextWithAnimate:animate isauto:isAuto complete:completeHandle];
 }
 
@@ -197,20 +211,32 @@
 
 @implementation ZHSimpleAnimateView (ZHSimpleAnimateScroll)
 - (void)scrollToIndex:(NSInteger)index animate:(BOOL)animated{
-//    if (self.scrollView.dragging || self.scrollView.decelerating || self.scrollView.tracking) {return;}
+    if (!self.scrollEnable) {NSLog(@"scrollEnable not valiad");return;}
+    if (self.scrollView.dragging || self.scrollView.decelerating || self.scrollView.tracking) {return;}
     if (self.scrollContainerView.showIndex == index) {return;}
     CGRect frame = self.scrollContainerView.frame;
     NSInteger loopIndex = self.scrollContainerView.showIndex < index ? index - 1 : index + 1;
-    frame.origin.x = MAX(0, self.scrollView.frame.size.width * (loopIndex));
+    CGPoint previousOffset = CGPointZero;
+    CGPoint targetOffset   = CGPointZero;
+    if ([self isHorizontalDirect]) {
+        frame.origin.x = MAX(0, self.scrollView.frame.size.width * (loopIndex));
+        previousOffset = CGPointMake(frame.origin.x, 0);
+        targetOffset   = CGPointMake(self.scrollView.frame.size.width * index, 0);
+    }else if([self isVerticalDirect]){
+        frame.origin.y = MAX(0, self.scrollView.frame.size.height * (loopIndex));
+        previousOffset = CGPointMake(0, frame.origin.y);
+        targetOffset   = CGPointMake(0, self.scrollView.frame.size.height * index);
+    }
     self.scrollContainerView.scrollTagetFrame = frame;
-    [self.scrollView setContentOffset:CGPointMake(frame.origin.x, 0) animated:NO];
+    [self.scrollView setContentOffset:previousOffset animated:NO];
     [self.scrollContainerView updateContentView];
-    [UIView animateWithDuration:0.3 animations:^{
-        [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width * index, 0)];
-    } completion:^(BOOL finished) {
-        
-    }];
-//    [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width * index, 0) animated:animated];
+    if (animated) {
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.scrollView setContentOffset:targetOffset];
+        } completion:nil];
+    }else{
+        [self.scrollView setContentOffset:targetOffset];
+    }
 }
 
 - (void)setNumberOfRows:(NSUInteger)numberOfRows{
@@ -223,6 +249,9 @@
     return [objc_getAssociatedObject(self, @selector(setNumberOfRows:)) unsignedIntegerValue];
 }
 - (void)setScrollEnable:(BOOL)scrollEnable{
+    if (scrollEnable && (![self isHorizontalDirect] || ![self isVerticalDirect])) {
+        NSLog(@"assigned scroll type not valiad");return;
+    }
     self.scrollView.scrollEnabled = scrollEnable;
     [self resetScrollViewContentSize];
 }

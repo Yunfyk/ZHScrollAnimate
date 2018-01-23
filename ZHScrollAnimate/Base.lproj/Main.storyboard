@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -22,18 +22,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1yy-Kz-oSG">
-                                <rect key="frame" x="161" y="595" width="52" height="42"/>
+                                <rect key="frame" x="161.5" y="595" width="51" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Next"/>
                                 <connections>
                                     <action selector="next" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zdb-1n-TcF"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bv8-OB-3WP">
+                                <rect key="frame" x="228" y="529" width="127" height="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <state key="normal" title="RandomScroll"/>
+                                <connections>
+                                    <action selector="randomScroll:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OoD-FH-5vU"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="1yy-Kz-oSG" secondAttribute="bottom" constant="30" id="4wB-uv-XgC"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="bv8-OB-3WP" secondAttribute="bottom" constant="100" id="JFc-tk-ALQ"/>
                             <constraint firstItem="1yy-Kz-oSG" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="oEf-eM-r7I"/>
+                            <constraint firstAttribute="trailing" secondItem="bv8-OB-3WP" secondAttribute="trailing" constant="20" id="zo0-6M-VUu"/>
                         </constraints>
                     </view>
                 </viewController>
