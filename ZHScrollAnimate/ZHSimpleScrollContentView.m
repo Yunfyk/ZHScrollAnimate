@@ -204,7 +204,7 @@
 - (void)getNewContentView{
     if (self.viewForIndex) {
         if (self.scrollType < (1 << 20)) {
-            if (CGRectEqualToRect(self.frame, self.superview.bounds)) {
+            if (CGRectContainsRect(self.superview.bounds, self.frame)) {
                 *_showIndex = *_index;
             }else{
                 if (*_index == 0 && *_showIndex > 0) {

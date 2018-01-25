@@ -25,7 +25,7 @@
     
     self.names = @[@"人生若只如初见",@"何事秋风悲画扇",@"等闲变却故人心",@"却道故人心易变",@"骊山语罢清宵半",@"泪雨霖铃终不怨",@"何如薄幸锦衣郎",@"比翼连枝当日愿"];
     
-    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeB2T];
+    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeR2L];
     self.scrollView.scrollEnable = YES;
 //    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeCurlUp];
 //    self.scrollView.autoAnimate     = YES;
@@ -35,8 +35,8 @@
     self.scrollView.backgroudImageView.contentMode = UIViewContentModeScaleAspectFill;
     self.scrollView.backgroudImageView.image = [UIImage imageNamed:@"1"];
     
-    NSArray *HC = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-120-[scrollView(200)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"scrollView":self.scrollView}];
-    NSArray *VC = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-180-[scrollView(60)]" options:0 metrics:nil views:@{@"scrollView":self.scrollView}];
+    NSArray *HC = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-120-[scrollView(200.30003310)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"scrollView":self.scrollView}];
+    NSArray *VC = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-180-[scrollView(60.00010071)]" options:0 metrics:nil views:@{@"scrollView":self.scrollView}];
     
     [self.view addConstraints:HC];
     [self.view addConstraints:VC];
