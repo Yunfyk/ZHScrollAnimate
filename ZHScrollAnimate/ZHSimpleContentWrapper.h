@@ -25,6 +25,8 @@
 
 - (void)updateContentView;
 
+- (void)adjustFrameSize;
+
 /** 视图即将显示在中间 */
 @property (nonatomic, copy)   void(^viewWillShow)(UIView *subView);
 /** 视图已经显示在中间 */

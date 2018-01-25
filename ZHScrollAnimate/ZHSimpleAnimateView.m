@@ -86,7 +86,7 @@
 }
 #pragma --mark--初始化--
 - (void)initDataWithType:(kMSimpleAnimateType)scrollType{
-    self.clipsToBounds          = YES;
+//    self.clipsToBounds          = YES;
     self.scrollType             = scrollType;
     self.scrollView.clipsToBounds = NO;
     self.autoAnimate            = NO;
@@ -216,7 +216,7 @@
 @implementation ZHSimpleAnimateView (ZHSimpleAnimateScroll)
 - (void)scrollToIndex:(NSInteger)index animate:(BOOL)animated{
     if (!self.scrollEnable) {NSLog(@"scrollEnable not valiad");return;}
-    if (self.scrollView.dragging || self.scrollView.decelerating || self.scrollView.tracking) {return;}
+//    if (self.scrollView.dragging || self.scrollView.decelerating || self.scrollView.tracking) {return;}
     if (self.contentWrapper.showIndex == index) {return;}
     CGRect frame = self.contentWrapper.frame;
     NSInteger loopIndex = self.contentWrapper.showIndex < index ? index - 1 : index + 1;
@@ -237,9 +237,12 @@
     if (animated) {
         [UIView animateWithDuration:0.3 animations:^{
             [self.scrollView setContentOffset:targetOffset];
-        } completion:nil];
+        } completion:^(BOOL finished) {
+            [self.contentWrapper adjustFrameSize];
+        }];
     }else{
         [self.scrollView setContentOffset:targetOffset];
+        [self.contentWrapper adjustFrameSize];
     }
 }
 

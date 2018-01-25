@@ -46,9 +46,29 @@
 - (void)setZ_width:(CGFloat)z_width{CGRect frame = self.frame;frame.size.width = z_width;self.frame = frame;}
 - (void)setZ_height:(CGFloat)z_height{CGRect frame = self.frame;frame.size.height = z_height;self.frame = frame;}
 
-- (BOOL)isInLeftOrTopSide{      return (self.z_x < 0 || self.z_y < 0);}
-- (BOOL)isInMiddleSide{         return (self.z_x == 0 && self.z_y == 0);}
-- (BOOL)isInRightOrBottomSide{  return (self.z_x > 0 || self.z_y > 0);}
+//- (BOOL)isInLeftOrTopSide{      return (self.z_x < 0 || self.z_y < 0);}
+//- (BOOL)isInMiddleSide{         return (self.z_x == 0 && self.z_y == 0);}
+//- (BOOL)isInRightOrBottomSide{  return (self.z_x > 0 || self.z_y > 0);}
+- (BOOL)isInLeftSide{
+    CGPoint centerl = (CGPoint){-self.z_width*0.5,self.z_height*0.5};return CGRectContainsPoint(self.frame, centerl);
+}
+- (BOOL)isInTopSide{
+    CGPoint centert = (CGPoint){self.z_width*0.5,-self.z_height*0.5};return CGRectContainsPoint(self.frame, centert);
+}
+- (BOOL)isInLeftOrTopSide{return [self isInLeftSide] || [self isInTopSide];}
+
+- (BOOL)isInMiddleSide{
+    CGPoint center = (CGPoint){self.z_width*0.5,self.z_height*0.5};return CGRectContainsPoint(self.frame, center);
+}
+- (BOOL)isInRightSide{
+    CGPoint centerr = (CGPoint){self.z_width*1.5,self.z_height*0.5};
+    return CGRectContainsPoint(self.frame, centerr);
+}
+- (BOOL)isInBottomSide{
+    CGPoint centerb = (CGPoint){self.z_width*0.5,self.z_height*1.5};
+    return CGRectContainsPoint(self.frame, centerb);
+}
+- (BOOL)isInRightOrBottomSide{return [self isInRightSide] || [self isInBottomSide];}
 
 - (void)setOffset:(CGFloat)offset{
     CGRect frame = self.frame;
@@ -97,7 +117,17 @@
     }
 }
 - (void)adjustFrameSize{
-    
+    if ([self isInLeftSide]) {
+        self.z_x = -self.z_width;
+    }else if ([self isInTopSide]){
+        self.z_y = -self.z_height;
+    }else if ([self isInMiddleSide]){
+        self.z_x = self.z_y = 0;
+    }else if ([self isInRightSide]){
+        self.z_x = self.z_width;
+    }else if ([self isInBottomSide]){
+        self.z_y = self.z_height;
+    }
 }
 
 - (void)scrollToNewWithPlusValue:(NSInteger)plusValue{

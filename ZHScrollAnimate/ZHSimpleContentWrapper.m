@@ -76,6 +76,7 @@
         self.tmpView1 = self.view1;
         self.tmpView2 = self.view2;
         self.currentShowView = self.view1;
+        self.backgroundColor = [UIColor magentaColor];
     }
     return self;
 }
@@ -123,6 +124,11 @@
 }
 
 - (void)setFrame:(CGRect)frame{
+    if ([self isHorizontalDirect]) {
+        if (frame.origin.x < 0 || (frame.origin.x > self.frame.size.width*(self.numberOfRows-1))) {return;}
+    }else if ([self isVerticalDirect]){
+        if (frame.origin.y < 0 || (frame.origin.y > self.frame.size.height*(self.numberOfRows-1))) {return;}
+    }
     CGRect primitFrame = self.frame;
     [super setFrame:frame];
     CGFloat offset = 0;
@@ -145,9 +151,11 @@
     [_view3 updateContentView];
 }
 
-//- (void)adjustFrameSize{
-//    
-//}
+- (void)adjustFrameSize{
+    [_view1 adjustFrameSize];
+    [_view2 adjustFrameSize];
+    [_view3 adjustFrameSize];
+}
 
 - (void)autoAnimateDispatch{
     [self nextWithAnimate:YES isauto:YES complete:nil];
