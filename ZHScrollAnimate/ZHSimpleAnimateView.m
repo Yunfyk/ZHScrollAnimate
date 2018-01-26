@@ -169,10 +169,16 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     CGRect contentFrame = self.contentWrapper.frame;
     if ([self isHorizontalDirect]) {
-        CGFloat width = self.frame.size.width;
+        CGFloat width = scrollView.frame.size.width;
         CGFloat offset = scrollView.contentOffset.x;
-        self.contentWrapper.showIndex = MAX(0, ((offset + 0.5*width)/width));
+//        self.contentWrapper.showIndex = MAX(0, ((offset + 0.5*width)/width));
+        NSInteger currentPage = MAX(0, ((offset + 0.5*width)/width));
         self.contentWrapper.frame = (CGRect){offset,contentFrame.origin.y,contentFrame.size};
+        if (self.contentWrapper.showIndex != currentPage) {
+            self.contentWrapper.showIndex = currentPage;
+            [self.contentWrapper updateContentView];
+        }
+        NSLog(@"%ld",(long)self.contentWrapper.showIndex);
         if (offset + width*0.5 < 0 ||  offset + width > width * self.numberOfRows) {return;}
     }else if ([self isVerticalDirect]){
         CGFloat height = self.frame.size.height;

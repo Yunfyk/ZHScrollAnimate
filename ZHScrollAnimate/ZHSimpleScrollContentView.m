@@ -74,14 +74,14 @@
     CGRect frame = self.frame;
     if ([self isHorizontalDirect]) {
         frame.origin.x  += offset;
-        if (frame.origin.x < -self.z_width * 1.5) {
+        if (frame.origin.x < -self.z_width * 1.5-5) {
             frame.origin.x += self.z_width * 3;
             self.hidden = YES;
-            [self scrollToNewWithPlusValue:1];
-        }else if (frame.origin.x > self.z_width * 1.5){
+//            [self scrollToNewWithPlusValue:1];
+        }else if (frame.origin.x > self.z_width * 1.5 + 5){
             frame.origin.x -= self.z_width * 3;
             self.hidden = YES;
-            [self scrollToNewWithPlusValue:-1];
+//            [self scrollToNewWithPlusValue:-1];
         }else{if (self.hidden) {
             self.hidden = NO;
         }}
@@ -90,11 +90,11 @@
         if (frame.origin.y < -self.z_height * 1.5) {
             frame.origin.y += self.z_height * 3;
             self.hidden = YES;
-            [self scrollToNewWithPlusValue:1];
+//            [self scrollToNewWithPlusValue:1];
         }else if (frame.origin.y > self.z_height * 1.5){
             frame.origin.y -= self.z_height * 3;
             self.hidden = YES;
-            [self scrollToNewWithPlusValue:-1];
+//            [self scrollToNewWithPlusValue:-1];
         }else{if (self.hidden) {self.hidden = NO;}}
     }
     self.frame = frame;
@@ -141,7 +141,10 @@
 }
 
 - (void)setupNewViewWithIndex:(NSInteger)index{
-    if (index < 0 || index > self.numberOfRows - 1) {[self.tmpView removeFromSuperview];self.bindIndex = -10;return;}
+    if (index < 0 || index > self.numberOfRows - 1) {
+        [self.tmpView removeFromSuperview];self.bindIndex = -10;
+        return;
+    }
     if (self.bindIndex == index) {return;}
     if (self.viewForIndex) {
         UIView *aView = self.viewForIndex(index);
