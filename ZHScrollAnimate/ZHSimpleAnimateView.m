@@ -212,9 +212,9 @@
     }
 }
 
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-//    [self.contentWrapper adjustFrameSize];
-//}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    [self.contentWrapper adjustFrameSize];
+}
 
 - (void)dealloc
 {

@@ -74,11 +74,11 @@
     CGRect frame = self.frame;
     if ([self isHorizontalDirect]) {
         frame.origin.x  += offset;
-        if (frame.origin.x < -self.z_width * 1.5-5) {
+        if (frame.origin.x < -self.z_width * 1.5) {
             frame.origin.x += self.z_width * 3;
             self.hidden = YES;
 //            [self scrollToNewWithPlusValue:1];
-        }else if (frame.origin.x > self.z_width * 1.5 + 5){
+        }else if (frame.origin.x > self.z_width * 1.5){
             frame.origin.x -= self.z_width * 3;
             self.hidden = YES;
 //            [self scrollToNewWithPlusValue:-1];
