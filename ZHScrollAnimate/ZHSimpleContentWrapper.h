@@ -25,6 +25,8 @@
 
 - (void)updateContentView;
 
+- (void)resetContentFrame;
+
 - (void)adjustFrameSize;
 
 /** 视图即将显示在中间 */

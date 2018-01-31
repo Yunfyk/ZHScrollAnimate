@@ -178,7 +178,7 @@
             self.contentWrapper.showIndex = currentPage;
             [self.contentWrapper updateContentView];
         }
-        NSLog(@"%ld",(long)self.contentWrapper.showIndex);
+//        NSLog(@"%ld",(long)self.contentWrapper.showIndex);
         if (offset + width*0.5 < 0 ||  offset + width > width * self.numberOfRows) {return;}
     }else if ([self isVerticalDirect]){
         CGFloat height = self.frame.size.height;
@@ -212,6 +212,10 @@
     }
 }
 
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+//    [self.contentWrapper adjustFrameSize];
+//}
+
 - (void)dealloc
 {
     NSLog(@"%s",__func__);
@@ -237,6 +241,7 @@
         previousOffset = CGPointMake(0, frame.origin.y);
         targetOffset   = CGPointMake(0, self.scrollView.frame.size.height * index);
     }
+    self.scrollView.scrollEnabled = NO;
     self.contentWrapper.scrollTagetFrame = frame;
     [self.scrollView setContentOffset:previousOffset animated:NO];
     [self.contentWrapper updateContentView];
@@ -245,10 +250,12 @@
             [self.scrollView setContentOffset:targetOffset];
         } completion:^(BOOL finished) {
             [self.contentWrapper adjustFrameSize];
+            self.scrollView.scrollEnabled = YES;
         }];
     }else{
         [self.scrollView setContentOffset:targetOffset];
         [self.contentWrapper adjustFrameSize];
+        self.scrollView.scrollEnabled = YES;
     }
 }
 

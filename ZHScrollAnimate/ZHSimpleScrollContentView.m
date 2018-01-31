@@ -128,6 +128,7 @@
     }else if ([self isInBottomSide]){
         self.z_y = self.z_height;
     }
+    if (self.hidden) {self.hidden = NO;}
 }
 
 - (void)scrollToNewWithPlusValue:(NSInteger)plusValue{

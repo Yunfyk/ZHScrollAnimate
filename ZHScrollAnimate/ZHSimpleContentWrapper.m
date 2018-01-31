@@ -125,7 +125,11 @@
 
 - (void)setFrame:(CGRect)frame{
     if ([self isHorizontalDirect]) {
-        if (frame.origin.x < 0 || (frame.origin.x > self.frame.size.width*(self.numberOfRows-1))) {return;}
+        if (frame.origin.x < 0) {
+            CGRect frame = self.frame;frame.origin.x = 0;self.frame = frame;
+        }else if (frame.origin.x > self.frame.size.width*(self.numberOfRows-1)){
+            CGRect frame = self.frame;frame.origin.x = self.frame.size.width*(self.numberOfRows-1);self.frame = frame;
+        }
     }else if ([self isVerticalDirect]){
         if (frame.origin.y < 0 || (frame.origin.y > self.frame.size.height*(self.numberOfRows-1))) {return;}
     }
@@ -149,6 +153,15 @@
     [_view1 updateContentView];
     [_view2 updateContentView];
     [_view3 updateContentView];
+}
+
+- (void)resetContentFrame{
+    if (_view1.hidden) {_view1.hidden = NO;}
+    if (_view2.hidden) {_view2.hidden = NO;}
+    if (_view3.hidden) {_view3.hidden = NO;}
+    _view1.frame = _view1.nextFrame;
+    _view2.frame = _view2.nextFrame;
+    _view3.frame = _view3.nextFrame;
 }
 
 - (void)adjustFrameSize{
