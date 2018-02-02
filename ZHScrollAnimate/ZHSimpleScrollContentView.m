@@ -121,22 +121,7 @@
                 [self setupNewViewWithIndex:self.scrollIndex];
             }
         }
-
-        
         NSLog(@"%@    %ld",NSStringFromCGRect([self convertRect:self.frame toView:self.superview.superview]),self.scrollIndex);
-//        NSLog(@"%@",self);
-//        frame.origin.x  += offset;
-//        if (frame.origin.x < -self.z_width * 1.5) {
-//            frame.origin.x += self.z_width * 3;
-//            self.hidden = YES;
-////            [self scrollToNewWithPlusValue:1];
-//        }else if (frame.origin.x > self.z_width * 1.5){
-//            frame.origin.x -= self.z_width * 3;
-//            self.hidden = YES;
-////            [self scrollToNewWithPlusValue:-1];
-//        }else{if (self.hidden) {
-//            self.hidden = NO;
-//        }}
     }else if ([self isVerticalDirect]){
         frame.origin.y  += offset;
         if (frame.origin.y < -self.z_height * 1.5) {
@@ -153,11 +138,11 @@
 }
 - (void)updateContentView{
     if ([self isInLeftOrTopSide]) {
-        if (self.bindIndex != *_showIndex - 1) {
-            [self setupNewViewWithIndex:*_showIndex - 1];
+        if (self.bindIndex != self.scrollIndex) {
+            [self setupNewViewWithIndex:self.scrollIndex];
         }
     }else if ([self isInRightOrBottomSide]){
-        if (self.bindIndex != *_showIndex + 1) {
+        if (self.bindIndex != self.scrollIndex) {
             [self setupNewViewWithIndex:*_showIndex + 1];
         }
     }else{

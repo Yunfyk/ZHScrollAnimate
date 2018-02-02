@@ -215,7 +215,10 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     [self.contentWrapper adjustFrameSize];
 }
-
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
+    [self.contentWrapper adjustFrameSize];
+    [self.contentWrapper updateContentView];
+}
 - (void)dealloc
 {
     NSLog(@"%s",__func__);
@@ -241,21 +244,22 @@
         previousOffset = CGPointMake(0, frame.origin.y);
         targetOffset   = CGPointMake(0, self.scrollView.frame.size.height * index);
     }
-    self.scrollView.scrollEnabled = NO;
+//    self.scrollView.scrollEnabled = NO;
     self.contentWrapper.scrollTagetFrame = frame;
     [self.scrollView setContentOffset:previousOffset animated:NO];
-    [self.contentWrapper updateContentView];
+//    [self.contentWrapper updateContentView];
     if (animated) {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.scrollView setContentOffset:targetOffset];
-        } completion:^(BOOL finished) {
-            [self.contentWrapper adjustFrameSize];
-            self.scrollView.scrollEnabled = YES;
-        }];
+        [self.scrollView setContentOffset:targetOffset animated:YES];
+//        [UIView animateWithDuration:2.3 animations:^{
+//            [self.scrollView setContentOffset:targetOffset];
+//        } completion:^(BOOL finished) {
+//            [self.contentWrapper adjustFrameSize];
+//            self.scrollView.scrollEnabled = YES;
+//        }];
     }else{
         [self.scrollView setContentOffset:targetOffset];
         [self.contentWrapper adjustFrameSize];
-        self.scrollView.scrollEnabled = YES;
+//        self.scrollView.scrollEnabled = YES;
     }
 }
 
