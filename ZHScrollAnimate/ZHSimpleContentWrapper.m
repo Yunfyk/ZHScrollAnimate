@@ -31,7 +31,7 @@
 - (ZHSimpleScrollContentView *)view1{
     if (!_view1) {
         _view1 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
-        _view1.frame = self.bounds;
+        _view1.frame = self.bounds;_view1.tag = 1;
         [self commonViewConfigure:_view1];
     }
     return _view1;
@@ -43,6 +43,7 @@
         if (self.scrollType >= (1 << 20)) {
             _view2.hidden = YES;
         }
+        _view2.tag = 2;
         [self commonViewConfigure:_view2];
     }
     return _view2;
@@ -50,7 +51,7 @@
 - (void)initView3{
     if (!_view3) {
         _view3 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
-        [self commonViewConfigure:_view3];
+        [self commonViewConfigure:_view3];_view3.tag = 3;
         [self addSubview:_view3];
     }
 }
@@ -73,14 +74,25 @@
         }
         [self addSubview:self.view2];
         [self addSubview:self.view1];
+//        [self bindViews];
         self.tmpView1 = self.view1;
         self.tmpView2 = self.view2;
         self.currentShowView = self.view1;
         self.backgroundColor = [UIColor magentaColor];
+        _view1.backgroundColor = [UIColor blueColor];
+        _view2.backgroundColor = [UIColor brownColor];
+        _view3.backgroundColor = [UIColor cyanColor];
     }
     return self;
 }
-
+//- (void)bindViews{
+//    self.view1.bindViewA = self.view2;
+//    self.view1.bindViewB = self.view3;
+//    self.view2.bindViewA = self.view1;
+//    self.view2.bindViewB = self.view3;
+//    self.view3.bindViewA = self.view1;
+//    self.view3.bindViewB = self.view2;
+//}
 - (void)setNumberOfRows:(NSUInteger)numberOfRows{
     _numberOfRows       = numberOfRows;
     _view1.numberOfRows = numberOfRows;
@@ -133,14 +145,14 @@
     }else if ([self isVerticalDirect]){
         if (frame.origin.y < 0 || (frame.origin.y > self.frame.size.height*(self.numberOfRows-1))) {return;}
     }
-    CGRect primitFrame = self.frame;
+//    CGRect primitFrame = self.frame;
     [super setFrame:frame];
-    CGFloat offset = 0;
-    if ([self isHorizontalDirect]) {
-        offset  = primitFrame.origin.x - frame.origin.x;
-    }else if ([self isVerticalDirect]){
-        offset  = primitFrame.origin.y - frame.origin.y;
-    }
+    CGFloat offset = frame.origin.x;
+//    if ([self isHorizontalDirect]) {
+//        offset  = primitFrame.origin.x - frame.origin.x;
+//    }else if ([self isVerticalDirect]){
+//        offset  = primitFrame.origin.y - frame.origin.y;
+//    }
     _view1.offset   = offset;
     _view2.offset   = offset;
     if (_view3) {_view3.offset = offset;}

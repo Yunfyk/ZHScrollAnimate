@@ -176,7 +176,7 @@
         self.contentWrapper.frame = (CGRect){offset,contentFrame.origin.y,contentFrame.size};
         if (self.contentWrapper.showIndex != currentPage) {
             self.contentWrapper.showIndex = currentPage;
-            [self.contentWrapper updateContentView];
+//            [self.contentWrapper updateContentView];
         }
 //        NSLog(@"%ld",(long)self.contentWrapper.showIndex);
         if (offset + width*0.5 < 0 ||  offset + width > width * self.numberOfRows) {return;}

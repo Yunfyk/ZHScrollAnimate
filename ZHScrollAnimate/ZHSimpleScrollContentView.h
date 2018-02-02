@@ -41,6 +41,10 @@ typedef UIView *(^viewForIndexBlock)(NSInteger index);
 
 @property (nonatomic, assign) CGFloat                       offset;
 
+@property (nonatomic, assign) NSInteger                     scrollIndex;
+//@property (nonatomic, weak)   ZHSimpleScrollContentView     *bindViewA;
+//@property (nonatomic, weak)   ZHSimpleScrollContentView     *bindViewB;
+
 - (instancetype)initWithScrollType:(kMSimpleAnimateType)scrollType;
 
 - (void)getNewContentView;

@@ -49,6 +49,12 @@
 //- (BOOL)isInLeftOrTopSide{      return (self.z_x < 0 || self.z_y < 0);}
 //- (BOOL)isInMiddleSide{         return (self.z_x == 0 && self.z_y == 0);}
 //- (BOOL)isInRightOrBottomSide{  return (self.z_x > 0 || self.z_y > 0);}
+//- (BOOL)isLeftReativeForView:(ZHSimpleScrollContentView *)view{
+//    if (view.z_x < self.z_x) {return YES;}else{return NO;}
+//}
+//- (BOOL)isRightReativeForView:(ZHSimpleScrollContentView *)view{
+//    if (view.z_x > self.z_x) {return YES;}else{return NO;}
+//}
 - (BOOL)isInLeftSide{
     CGPoint centerl = (CGPoint){-self.z_width*0.5,self.z_height*0.5};return CGRectContainsPoint(self.frame, centerl);
 }
@@ -70,21 +76,67 @@
 }
 - (BOOL)isInRightOrBottomSide{return [self isInRightSide] || [self isInBottomSide];}
 
+//- (void)resetLeftBindViewFrame{
+//    if ([self isLeftReativeForView:self.bindViewA]) {
+//        self.bindViewA.z_x = CGRectGetMaxX(self.bindViewB.frame);
+//    }else if ([self isLeftReativeForView:self.bindViewB]){
+//        self.bindViewB.z_x = CGRectGetMaxX(self.bindViewA.frame);
+//    }
+//}
+//- (void)resetRightBindViewFrame{
+//    if ([self isRightReativeForView:self.bindViewA]) {
+//        self.bindViewA.z_x = self.bindViewB.z_x - self.bindViewA.z_width;
+//    }else if ([self isRightReativeForView:self.bindViewB]){
+//        self.bindViewB.z_x = self.bindViewA.z_x - self.bindViewB.z_width;
+//    }
+//}
+
 - (void)setOffset:(CGFloat)offset{
     CGRect frame = self.frame;
+    if (self.z_width == 0 || self.z_height == 0) {return;}
     if ([self isHorizontalDirect]) {
-        frame.origin.x  += offset;
-        if (frame.origin.x < -self.z_width * 1.5) {
-            frame.origin.x += self.z_width * 3;
-            self.hidden = YES;
-//            [self scrollToNewWithPlusValue:1];
-        }else if (frame.origin.x > self.z_width * 1.5){
-            frame.origin.x -= self.z_width * 3;
-            self.hidden = YES;
-//            [self scrollToNewWithPlusValue:-1];
-        }else{if (self.hidden) {
-            self.hidden = NO;
-        }}
+        self.scrollIndex = MAX(0, ((offset + 0.5*self.z_width)/self.z_width));
+        CGFloat ww = 3*self.z_width;
+        int factor = floor(offset/ww);
+        CGFloat rel = offset - (factor * ww);
+        CGFloat w = self.z_width;
+//        NSInteger off = round(offset);
+//        NSInteger rel = off%(3 * w);
+        if (self.tag == 2) {
+            rel -= self.z_width;
+        }else if (self.tag == 3){
+            rel += self.z_width;
+        }
+        CGFloat ox = self.z_x;
+        if (rel < 1.5 * w) {
+            self.z_x = -rel;
+            if (ox > w && self.z_x < w * 0.5) {
+                self.scrollIndex -= 1;
+                [self setupNewViewWithIndex:self.scrollIndex];
+            }
+        }else{
+            self.z_x = 3 * w - rel;
+            if (ox < w*0.5 && self.z_x > w * 0.5) {
+                self.scrollIndex += 1;
+                [self setupNewViewWithIndex:self.scrollIndex];
+            }
+        }
+
+        
+        NSLog(@"%@    %ld",NSStringFromCGRect([self convertRect:self.frame toView:self.superview.superview]),self.scrollIndex);
+//        NSLog(@"%@",self);
+//        frame.origin.x  += offset;
+//        if (frame.origin.x < -self.z_width * 1.5) {
+//            frame.origin.x += self.z_width * 3;
+//            self.hidden = YES;
+////            [self scrollToNewWithPlusValue:1];
+//        }else if (frame.origin.x > self.z_width * 1.5){
+//            frame.origin.x -= self.z_width * 3;
+//            self.hidden = YES;
+////            [self scrollToNewWithPlusValue:-1];
+//        }else{if (self.hidden) {
+//            self.hidden = NO;
+//        }}
     }else if ([self isVerticalDirect]){
         frame.origin.y  += offset;
         if (frame.origin.y < -self.z_height * 1.5) {
@@ -97,7 +149,7 @@
 //            [self scrollToNewWithPlusValue:-1];
         }else{if (self.hidden) {self.hidden = NO;}}
     }
-    self.frame = frame;
+//    self.frame = frame;
 }
 - (void)updateContentView{
     if ([self isInLeftOrTopSide]) {

@@ -43,7 +43,7 @@
     self.scrollView.numberOfRows = 10;
     __weak typeof(self)wkSelf = self;
     self.scrollView.viewForIndex = ^UIView *(NSInteger index){
-        NSLog(@"%ld | showIndex : %ld",index,wkSelf.scrollView.showIndex);
+//        NSLog(@"%ld | showIndex : %ld",index,wkSelf.scrollView.showIndex);
         UILabel *label = [[UILabel alloc] init];
 //        label.backgroundColor = [UIColor colorWithRed:(arc4random()%100+100)/255.0 green:0.3 blue:0.3 alpha:1];
         label.textColor = [UIColor whiteColor];
