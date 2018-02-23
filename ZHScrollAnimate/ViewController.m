@@ -25,32 +25,35 @@
     
     self.names = @[@"人生若只如初见",@"何事秋风悲画扇",@"等闲变却故人心",@"却道故人心易变",@"骊山语罢清宵半",@"泪雨霖铃终不怨",@"何如薄幸锦衣郎",@"比翼连枝当日愿"];
     
-    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeR2L];
-    self.scrollView.scrollEnable = YES;
+    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeFlipFromRight];
+//    self.scrollView.scrollEnable = YES;
 //    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeCurlUp];
 //    self.scrollView.autoAnimate     = YES;
     self.scrollView.timeInterval    = 2;
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.scrollView];
     self.scrollView.backgroudImageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.scrollView.backgroudImageView.image = [UIImage imageNamed:@"1"];
+//    self.scrollView.backgroudImageView.image = [UIImage imageNamed:@"1"];
     
-    NSArray *HC = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-120-[scrollView(200.30003310)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"scrollView":self.scrollView}];
-    NSArray *VC = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-180-[scrollView(60.00010071)]" options:0 metrics:nil views:@{@"scrollView":self.scrollView}];
+//    NSArray *HC = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-120-[scrollView(200.30003310)]" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"scrollView":self.scrollView}];
+//    NSArray *VC = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-180-[scrollView(60.00010071)]" options:0 metrics:nil views:@{@"scrollView":self.scrollView}];
+    
+    NSArray *HC = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[scrollView]-50-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:@{@"scrollView":self.scrollView}];
+    NSArray *VC = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-80-[scrollView]-80-|" options:0 metrics:nil views:@{@"scrollView":self.scrollView}];
     
     [self.view addConstraints:HC];
     [self.view addConstraints:VC];
-    self.scrollView.numberOfRows = 10;
-    __weak typeof(self)wkSelf = self;
-    self.scrollView.viewForIndex = ^UIView *(NSInteger index){
+    self.scrollView.numberOfRows = 4;
+//    __weak typeof(self)wkSelf = self;
+//    self.scrollView.viewForIndex = ^UIView *(NSInteger index){
 //        NSLog(@"%ld | showIndex : %ld",index,wkSelf.scrollView.showIndex);
-        UILabel *label = [[UILabel alloc] init];
-//        label.backgroundColor = [UIColor colorWithRed:(arc4random()%100+100)/255.0 green:0.3 blue:0.3 alpha:1];
-        label.textColor = [UIColor whiteColor];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.text = [NSString stringWithFormat:@"%@[%ld]",wkSelf.names[index%wkSelf.names.count],index];
-        return label;
-    };
+//        UILabel *label = [[UILabel alloc] init];
+////        label.backgroundColor = [UIColor colorWithRed:(arc4random()%100+100)/255.0 green:0.3 blue:0.3 alpha:1];
+//        label.textColor = [UIColor whiteColor];
+//        label.textAlignment = NSTextAlignmentCenter;
+//        label.text = [NSString stringWithFormat:@"%@[%ld]",wkSelf.names[index%wkSelf.names.count],index];
+//        return label;
+//    };
     
 //    self.scrollView.viewWillShow = ^(UIView *subView) {
 //        NSLog(@"[Will Show : %@]",subView);
@@ -58,11 +61,14 @@
 //    self.scrollView.viewDidShowAtIndex = ^(UIView *subView, NSInteger index) {
 //        NSLog(@"[Did Show : %@ | Index %ld]",subView,index);
 //    };
-//    self.scrollView.viewForIndex = ^UIView *(NSInteger index){
-//        NSLog(@"%ld",index);
-//        UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%ld",(index%3)]]];
-//        return imgView;
-//    };
+    self.scrollView.viewForIndex = ^UIView *(NSInteger index){
+        NSLog(@"%ld",index);
+        UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%ld",(index%4)]]];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 50, 40)];
+        label.text = [NSString stringWithFormat:@"%ld",index];
+        [imgView addSubview:label];
+        return imgView;
+    };
 
     // Do any additional setup after loading the view, typically from a nib.
 }

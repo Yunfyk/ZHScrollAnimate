@@ -8,6 +8,7 @@
 
 #import "ZHSimpleContentWrapper.h"
 #import "ZHWeakTimer.h"
+#import <objc/runtime.h>
 
 @interface ZHSimpleContentWrapper ()
 
@@ -40,7 +41,7 @@
     if (!_view2) {
         _view2 = [[ZHSimpleScrollContentView alloc] initWithScrollType:self.scrollType];
         _view2.frame = CGRectMake(10, 10, 10, 10);
-        if (self.scrollType >= (1 << 20)) {
+        if (self.scrollType >= (1 << 20) && kMSimpleAnimateTypeShuffle != self.scrollType) {
             _view2.hidden = YES;
         }
         _view2.tag = 2;
@@ -78,21 +79,14 @@
         self.tmpView1 = self.view1;
         self.tmpView2 = self.view2;
         self.currentShowView = self.view1;
-        self.backgroundColor = [UIColor magentaColor];
-        _view1.backgroundColor = [UIColor blueColor];
-        _view2.backgroundColor = [UIColor brownColor];
-        _view3.backgroundColor = [UIColor cyanColor];
+//        self.backgroundColor = [UIColor magentaColor];
+//        _view1.backgroundColor = [UIColor blueColor];
+//        _view2.backgroundColor = [UIColor brownColor];
+//        _view3.backgroundColor = [UIColor cyanColor];
     }
     return self;
 }
-//- (void)bindViews{
-//    self.view1.bindViewA = self.view2;
-//    self.view1.bindViewB = self.view3;
-//    self.view2.bindViewA = self.view1;
-//    self.view2.bindViewB = self.view3;
-//    self.view3.bindViewA = self.view1;
-//    self.view3.bindViewB = self.view2;
-//}
+
 - (void)setNumberOfRows:(NSUInteger)numberOfRows{
     _numberOfRows       = numberOfRows;
     _view1.numberOfRows = numberOfRows;
@@ -136,23 +130,27 @@
 }
 
 - (void)setFrame:(CGRect)frame{
+    CGFloat offset = frame.origin.x;
     if ([self isHorizontalDirect]) {
         if (frame.origin.x < 0) {
-            CGRect frame = self.frame;frame.origin.x = 0;self.frame = frame;
+            CGRect frame = self.frame;frame.origin.x = 0;//self.frame = frame;
         }else if (frame.origin.x > self.frame.size.width*(self.numberOfRows-1)){
-            CGRect frame = self.frame;frame.origin.x = self.frame.size.width*(self.numberOfRows-1);self.frame = frame;
+            CGRect frame = self.frame;frame.origin.x = self.frame.size.width*(self.numberOfRows-1);//self.frame = frame;
         }
     }else if ([self isVerticalDirect]){
+        offset = frame.origin.y;
         if (frame.origin.y < 0 || (frame.origin.y > self.frame.size.height*(self.numberOfRows-1))) {return;}
     }
 //    CGRect primitFrame = self.frame;
     [super setFrame:frame];
-    CGFloat offset = frame.origin.x;
 //    if ([self isHorizontalDirect]) {
 //        offset  = primitFrame.origin.x - frame.origin.x;
 //    }else if ([self isVerticalDirect]){
 //        offset  = primitFrame.origin.y - frame.origin.y;
 //    }
+    if (offset < -frame.size.width*0.4 || offset > frame.size.width*(self.numberOfRows-1)+frame.size.width*0.4) {
+        return;
+    }
     _view1.offset   = offset;
     _view2.offset   = offset;
     if (_view3) {_view3.offset = offset;}
@@ -253,30 +251,49 @@
         if (self.viewWillShow) {
             self.viewWillShow(self.currentShowView);
         }
-        [UIView transitionFromView:self.tmpView1 toView:self.tmpView2 duration:duration options:ops completion:^(BOOL finished) {
-            if (self.viewDidShowAtIndex) {
-                self.viewDidShowAtIndex(self.currentShowView.tmpView, _showIndex);
-            }
-            [self.tmpView1 getNewContentView];
-            ZHSimpleScrollContentView *tmp     = self.tmpView1;
-            self.tmpView1  = self.tmpView2;
-            self.tmpView2  = tmp;
-            self.isAminating= NO;
-            if (self.autoAnimate && !isAuto) {
-                [self.timer fireTimer];
-            }
-            if (completeHandle) {
-                completeHandle(finished);
-            }
-        }];
+        if (kMSimpleAnimateTypeShuffle == self.scrollType) {
+            [self shuffleWithView1:self.tmpView1 view2:self.tmpView2 complete:^(BOOL finished) {
+                if (self.viewDidShowAtIndex) {
+                    self.viewDidShowAtIndex(self.currentShowView.tmpView, _showIndex);
+                }
+                [self.tmpView1 getNewContentView];
+                ZHSimpleScrollContentView *tmp     = self.tmpView1;
+                self.tmpView1  = self.tmpView2;
+                self.tmpView2  = tmp;
+                self.isAminating= NO;
+                if (self.autoAnimate && !isAuto) {
+                    [self.timer fireTimer];
+                }
+                if (completeHandle) {
+                    completeHandle(finished);
+                }
+            }];
+        }else{
+            [UIView transitionFromView:self.tmpView1 toView:self.tmpView2 duration:duration options:ops completion:^(BOOL finished) {
+                if (self.viewDidShowAtIndex) {
+                    self.viewDidShowAtIndex(self.currentShowView.tmpView, _showIndex);
+                }
+                ZHSimpleScrollContentView *tmp     = self.tmpView1;
+                self.tmpView1  = self.tmpView2;
+                self.tmpView2  = tmp;
+                [self.tmpView2 getNewContentView];
+                self.isAminating= NO;
+                if (self.autoAnimate && !isAuto) {
+                    [self.timer fireTimer];
+                }
+                if (completeHandle) {
+                    completeHandle(finished);
+                }
+            }];
+        }
     }
 }
 
 - (void)layoutSubviews{
-    CGFloat width  = floor(self.frame.size.width);
-    CGFloat height = floor(self.frame.size.height);
-    CGFloat vwidth  = floor(self.view1.frame.size.width);
-    CGFloat vheight = floor(self.view1.frame.size.height);
+    CGFloat width  = self.frame.size.width;//floor(self.frame.size.width);
+    CGFloat height = self.frame.size.height;//floor(self.frame.size.height);
+    CGFloat vwidth  = self.view1.frame.size.width;//floor(self.view1.frame.size.width);
+    CGFloat vheight = self.view1.frame.size.height;//floor(self.view1.frame.size.height);
     if (vwidth != width || vheight != height) {
         CGSize itemSize = CGSizeMake(width, height);
         [self.view1 setFrame:(CGRect){0,0,itemSize}];
@@ -312,10 +329,81 @@
     [super layoutSubviews];
 }
 
+#pragma --mark data source --
+- (void)reloadDataWithItems:(void (^)(UIView *))enumBlock{
+    if (enumBlock) {
+        if (_view1.tmpView) {enumBlock(_view1.tmpView);}
+        if (_view2.tmpView) {enumBlock(_view2.tmpView);}
+        if (_view3.tmpView) {enumBlock(_view3.tmpView);}
+    }
+}
+- (void)reloadDataAtIndex:(NSInteger)index forItem:(void (^)(UIView *))enumBlock{
+    if (enumBlock) {
+        if (_view1.bindIndex == index) {
+            enumBlock(_view1.tmpView);
+        }else if (_view2.bindIndex == index){
+            enumBlock(_view2.tmpView);
+        }else if (_view3.bindIndex == index){
+            enumBlock(_view3.tmpView);
+        }
+    }
+}
+
 - (void)dealloc
 {
     [_timer invaliadTimer];
     NSLog(@"%s",__func__);
+}
+
+@end
+
+@interface UIView ()
+
+@property (nonatomic, copy) void(^shuffleFinished)(BOOL finished);
+
+@end
+
+@implementation UIView (ZHShuffleAnimate)
+
+- (void)setShuffleFinished:(void (^)(BOOL))shuffleFinished{
+    objc_setAssociatedObject(self, _cmd, shuffleFinished, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+- (void (^)(BOOL))shuffleFinished{
+    return objc_getAssociatedObject(self, @selector(setShuffleFinished:));
+}
+
+- (void)shuffleWithView1:(UIView *)view1 view2:(UIView *)view2 complete:(void(^)(BOOL finished))completeHandler{
+    if (view1.superview != view2.superview) {return;}
+    if ([view1.layer.animationKeys containsObject:@"zhb_shuffle"] && [view2.layer.animationKeys containsObject:@"zhb_shuffle"]) {
+        [view1.layer removeAnimationForKey:@"zhb_shuffle"];
+        [view2.layer removeAnimationForKey:@"zhb_shuffle"];
+    }
+    self.shuffleFinished = completeHandler;
+    [view1.superview bringSubviewToFront:view2];
+    CAKeyframeAnimation *animate = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    CATransform3D transform = CATransform3DIdentity;
+    transform.m34 = 1.0f/500;
+    transform = CATransform3DTranslate(transform, CGRectGetWidth(view1.frame)*2, 0, 0);
+    transform = CATransform3DTranslate(transform, 0, 0, CGRectGetWidth(view1.frame));
+    transform = CATransform3DRotate(transform, M_PI_4*0.6, 0, 0, 1);
+    transform = CATransform3DRotate(transform, M_PI_2*0.8, 0, 1, 0);
+    animate.values = @[[NSValue valueWithCATransform3D:CATransform3DIdentity],[NSValue valueWithCATransform3D:transform],[NSValue valueWithCATransform3D:CATransform3DIdentity]] ;
+    animate.duration = 1.0;
+    animate.delegate = self;
+    [view1.layer addAnimation:animate forKey:@"zhb_shuffle"];
+    
+    CAKeyframeAnimation *animate2 = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    CATransform3D transform2 = CATransform3DIdentity;
+    transform2 = CATransform3DTranslate(transform2, 0, 0, CGRectGetWidth(view1.frame)*2);
+    animate2.values = @[[NSValue valueWithCATransform3D:CATransform3DIdentity],[NSValue valueWithCATransform3D:CATransform3DIdentity],[NSValue valueWithCATransform3D:transform2]];
+    animate2.duration = 1.0;
+    [view2.layer addAnimation:animate2 forKey:@"zhb_shuffle"];
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
+    if (self.shuffleFinished) {
+        self.shuffleFinished(flag);
+    }
 }
 
 @end

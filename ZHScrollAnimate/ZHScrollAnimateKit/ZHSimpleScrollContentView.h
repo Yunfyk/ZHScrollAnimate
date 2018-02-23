@@ -20,7 +20,8 @@ typedef enum : NSUInteger {
     kMSimpleAnimateTypeCurlDown     = UIViewAnimationOptionTransitionCurlDown,         //下翻页
     kMSimpleAnimateTypeDissolve     = UIViewAnimationOptionTransitionCrossDissolve,    //渐隐
     kMSimpleAnimateTypeFlipFromTop  = UIViewAnimationOptionTransitionFlipFromTop,      //下向上翻转
-    kMSimpleAnimateTypeFlipFromBottom= UIViewAnimationOptionTransitionFlipFromBottom   //上向下翻转
+    kMSimpleAnimateTypeFlipFromBottom= UIViewAnimationOptionTransitionFlipFromBottom,  //上向下翻转
+    kMSimpleAnimateTypeShuffle
 } kMSimpleAnimateType;
 
 typedef UIView *(^viewForIndexBlock)(NSInteger index);
@@ -42,8 +43,8 @@ typedef UIView *(^viewForIndexBlock)(NSInteger index);
 @property (nonatomic, assign) CGFloat                       offset;
 
 @property (nonatomic, assign) NSInteger                     scrollIndex;
-//@property (nonatomic, weak)   ZHSimpleScrollContentView     *bindViewA;
-//@property (nonatomic, weak)   ZHSimpleScrollContentView     *bindViewB;
+
+@property (assign, nonatomic) NSInteger                     bindIndex;
 
 - (instancetype)initWithScrollType:(kMSimpleAnimateType)scrollType;
 

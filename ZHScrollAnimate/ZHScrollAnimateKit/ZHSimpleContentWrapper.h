@@ -37,7 +37,15 @@
 - (instancetype)initWithScrollType:(kMSimpleAnimateType)scrollType;
 
 - (void)nextWithAnimate:(BOOL)animate isauto:(BOOL)isAuto complete:(void (^)(BOOL))completeHandle;
-////滑动结束调整frame
-//- (void)adjustFrameSize;
+
+- (void)reloadDataWithItems:(void(^)(UIView *itemView))enumBlock;
+
+- (void)reloadDataAtIndex:(NSInteger)index forItem:(void(^)(UIView *itemView))enumBlock;
+
+@end
+
+@interface UIView (ZHShuffleAnimate)<CAAnimationDelegate>
+
+- (void)shuffleWithView1:(UIView *)view1 view2:(UIView *)view2 complete:(void(^)(BOOL finished))completeHandler;
 
 @end

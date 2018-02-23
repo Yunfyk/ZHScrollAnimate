@@ -10,8 +10,6 @@
 
 @interface ZHSimpleScrollContentView ()
 
-@property (assign, nonatomic) NSInteger bindIndex;
-
 @property (nonatomic, assign) CGFloat   z_x;
 @property (nonatomic, assign) CGFloat   z_y;
 @property (nonatomic, assign) CGFloat   z_width;
@@ -56,99 +54,93 @@
 //    if (view.z_x > self.z_x) {return YES;}else{return NO;}
 //}
 - (BOOL)isInLeftSide{
-    CGPoint centerl = (CGPoint){-self.z_width*0.5,self.z_height*0.5};return CGRectContainsPoint(self.frame, centerl);
+    CGPoint centerl = (CGPoint){-floor(self.z_width)*0.5,self.z_height*0.5};return CGRectContainsPoint(self.frame, centerl);
 }
 - (BOOL)isInTopSide{
-    CGPoint centert = (CGPoint){self.z_width*0.5,-self.z_height*0.5};return CGRectContainsPoint(self.frame, centert);
+    CGPoint centert = (CGPoint){floor(self.z_width)*0.5,-self.z_height*0.5};return CGRectContainsPoint(self.frame, centert);
 }
 - (BOOL)isInLeftOrTopSide{return [self isInLeftSide] || [self isInTopSide];}
 
 - (BOOL)isInMiddleSide{
-    CGPoint center = (CGPoint){self.z_width*0.5,self.z_height*0.5};return CGRectContainsPoint(self.frame, center);
+    CGPoint center = (CGPoint){floor(self.z_width)*0.5,self.z_height*0.5};return CGRectContainsPoint(self.frame, center);
 }
 - (BOOL)isInRightSide{
-    CGPoint centerr = (CGPoint){self.z_width*1.5,self.z_height*0.5};
+    CGPoint centerr = (CGPoint){floor(self.z_width)*1.5,self.z_height*0.5};
     return CGRectContainsPoint(self.frame, centerr);
 }
 - (BOOL)isInBottomSide{
-    CGPoint centerb = (CGPoint){self.z_width*0.5,self.z_height*1.5};
+    CGPoint centerb = (CGPoint){floor(self.z_width)*0.5,self.z_height*1.5};
     return CGRectContainsPoint(self.frame, centerb);
 }
 - (BOOL)isInRightOrBottomSide{return [self isInRightSide] || [self isInBottomSide];}
 
-//- (void)resetLeftBindViewFrame{
-//    if ([self isLeftReativeForView:self.bindViewA]) {
-//        self.bindViewA.z_x = CGRectGetMaxX(self.bindViewB.frame);
-//    }else if ([self isLeftReativeForView:self.bindViewB]){
-//        self.bindViewB.z_x = CGRectGetMaxX(self.bindViewA.frame);
-//    }
-//}
-//- (void)resetRightBindViewFrame{
-//    if ([self isRightReativeForView:self.bindViewA]) {
-//        self.bindViewA.z_x = self.bindViewB.z_x - self.bindViewA.z_width;
-//    }else if ([self isRightReativeForView:self.bindViewB]){
-//        self.bindViewB.z_x = self.bindViewA.z_x - self.bindViewB.z_width;
-//    }
-//}
-
 - (void)setOffset:(CGFloat)offset{
-    CGRect frame = self.frame;
     if (self.z_width == 0 || self.z_height == 0) {return;}
     if ([self isHorizontalDirect]) {
-        self.scrollIndex = MAX(0, ((offset + 0.5*self.z_width)/self.z_width));
-        CGFloat ww = 3*self.z_width;
-        int factor = floor(offset/ww);
+        self.scrollIndex = MAX(0, ((offset + 0.5*(NSInteger)(self.z_width))/(NSInteger)(self.z_width)));
+        CGFloat ww = 3*(self.z_width);
+        NSInteger factor = (NSInteger)(offset/ww);
         CGFloat rel = offset - (factor * ww);
-        CGFloat w = self.z_width;
-//        NSInteger off = round(offset);
-//        NSInteger rel = off%(3 * w);
+        CGFloat mw = self.z_width;
         if (self.tag == 2) {
             rel -= self.z_width;
         }else if (self.tag == 3){
             rel += self.z_width;
         }
         CGFloat ox = self.z_x;
-        if (rel < 1.5 * w) {
+        if (rel < 1.5 * mw) {
             self.z_x = -rel;
-            if (ox > w && self.z_x < w * 0.5) {
+            if (ox > mw && self.z_x < mw * 0.5) {
                 self.scrollIndex -= 1;
                 [self setupNewViewWithIndex:self.scrollIndex];
             }
         }else{
-            self.z_x = 3 * w - rel;
-            if (ox < w*0.5 && self.z_x > w * 0.5) {
+            self.z_x = 3 * mw - rel;
+            if (ox < mw*0.5 && self.z_x > mw * 0.5) {
                 self.scrollIndex += 1;
                 [self setupNewViewWithIndex:self.scrollIndex];
             }
         }
-        NSLog(@"%@    %ld",NSStringFromCGRect([self convertRect:self.frame toView:self.superview.superview]),self.scrollIndex);
     }else if ([self isVerticalDirect]){
-        frame.origin.y  += offset;
-        if (frame.origin.y < -self.z_height * 1.5) {
-            frame.origin.y += self.z_height * 3;
-            self.hidden = YES;
-//            [self scrollToNewWithPlusValue:1];
-        }else if (frame.origin.y > self.z_height * 1.5){
-            frame.origin.y -= self.z_height * 3;
-            self.hidden = YES;
-//            [self scrollToNewWithPlusValue:-1];
-        }else{if (self.hidden) {self.hidden = NO;}}
+        self.scrollIndex = MAX(0, ((offset + 0.5*(NSInteger)(self.z_height))/(NSInteger)(self.z_height)));
+        CGFloat ww = 3*(self.z_height);
+        NSInteger factor = (NSInteger)(offset/ww);
+        CGFloat rel = offset - (factor * ww);
+        CGFloat mw = self.z_height;
+        if (self.tag == 2) {
+            rel -= self.z_height;
+        }else if (self.tag == 3){
+            rel += self.z_height;
+        }
+        CGFloat ox = self.z_y;
+        if (rel < 1.5 * mw) {
+            self.z_y = -rel;
+            if (ox > mw && self.z_y < mw * 0.5) {
+                self.scrollIndex -= 1;
+                [self setupNewViewWithIndex:self.scrollIndex];
+            }
+        }else{
+            self.z_y = 3 * mw - rel;
+            if (ox < mw*0.5 && self.z_y > mw * 0.5) {
+                self.scrollIndex += 1;
+                [self setupNewViewWithIndex:self.scrollIndex];
+            }
+        }
     }
-//    self.frame = frame;
 }
 - (void)updateContentView{
     if ([self isInLeftOrTopSide]) {
         if (self.bindIndex != self.scrollIndex) {
-            [self setupNewViewWithIndex:self.scrollIndex];
+            [self setupNewViewWithIndex:self.scrollIndex - 1];
         }
     }else if ([self isInRightOrBottomSide]){
         if (self.bindIndex != self.scrollIndex) {
-            [self setupNewViewWithIndex:*_showIndex + 1];
+            [self setupNewViewWithIndex:self.scrollIndex + 1];
         }
     }else{
         if ([self isInMiddleSide]) {
             if (*_showIndex != self.bindIndex) {
-                [self setupNewViewWithIndex:*_showIndex];
+                [self setupNewViewWithIndex:self.scrollIndex];
             }
         }
     }
@@ -216,28 +208,28 @@
 - (void)nextFrameRecord{
     if ([self isHorizontalDirect]) {
         CGFloat multipValue = self.scrollType == kMSimpleAnimateTypeR2L ? 1.0 : -1.0;
-        if (self.z_x == -2 * multipValue * self.z_width) {
+        if ((int)(self.z_x) <= -2 * multipValue * (int)(self.z_width)) {
             self.nextFrame = (CGRect){(CGPoint){multipValue * self.z_width,0},self.frame.size};
-        }else if (self.z_x == -multipValue * self.z_width){
+        }else if ((int)(self.z_x) == -multipValue * (int)(self.z_width)){
             self.nextFrame = (CGRect){(CGPoint){-2 * multipValue * self.z_width,0},self.frame.size};
-        }else if (self.z_x == 0){
+        }else if ((int)(self.z_x) == 0){
             self.nextFrame = (CGRect){(CGPoint){-multipValue * self.z_width,0},self.frame.size};
-        }else if (self.z_x == multipValue * self.z_width){
+        }else if ((int)(self.z_x) == multipValue * (int)(self.z_width)){
             self.nextFrame = (CGRect){(CGPoint){0,0},self.frame.size};
-        }else if (self.z_x == 2 * multipValue * self.z_width){
+        }else if ((int)(self.z_x) >= 2 * multipValue * (int)(self.z_width)){
             self.nextFrame = (CGRect){(CGPoint){-multipValue * self.z_width,0},self.frame.size};
         }
     }else if ([self isVerticalDirect]){
         CGFloat multipValue = self.scrollType == kMSimpleAnimateTypeB2T ? 1.0 : -1.0;
-        if (self.z_y == -2 * multipValue * self.z_height) {
+        if ((int)(self.z_y) <= -2 * multipValue * (int)(self.z_height)) {
             self.nextFrame = (CGRect){(CGPoint){0,multipValue * self.z_height},self.frame.size};
-        }else if (self.z_y == -multipValue * self.z_height){
+        }else if ((int)(self.z_y) == -multipValue * (int)(self.z_height)){
             self.nextFrame = (CGRect){(CGPoint){0,-2 * multipValue * self.z_height},self.frame.size};
-        }else if (self.z_y == 0){
+        }else if ((int)(self.z_y) == 0){
             self.nextFrame = (CGRect){(CGPoint){0,-multipValue * self.z_height},self.frame.size};
-        }else if (self.z_y == multipValue * self.z_height){
+        }else if ((int)(self.z_y) == multipValue * (int)(self.z_height)){
             self.nextFrame = (CGRect){(CGPoint){0,0},self.frame.size};
-        }else if (self.z_y == 2 * multipValue * self.z_height){
+        }else if ((int)(self.z_y) >= 2 * multipValue * (int)(self.z_height)){
             self.nextFrame = (CGRect){(CGPoint){0,-multipValue * self.z_height},self.frame.size};
         }
     }
@@ -246,25 +238,25 @@
 - (void)finishAnimation{
     [self nextFrameRecord];
     if (self.scrollType == kMSimpleAnimateTypeR2L) {
-        if (self.z_x == -2 * self.z_width) {
+        if ((int)(self.z_x) <= -2 * (int)(self.z_width)) {
             [self setFrame:self.nextFrame];
             [self getNewContentView];
             [self nextFrameRecord];
         }
     }else if (kMSimpleAnimateTypeL2R == self.scrollType){
-        if (self.z_x == 2 * self.z_width) {
+        if ((int)(self.z_x) >= 2 * (int)(self.z_width)) {
             [self setFrame:self.nextFrame];
             [self getNewContentView];
             [self nextFrameRecord];
         }
     }else if (self.scrollType == kMSimpleAnimateTypeB2T){
-        if (self.z_y == -2 * self.z_height) {
+        if ((int)(self.z_y) <= -2 * (int)(self.z_height)) {
             [self setFrame:self.nextFrame];
             [self getNewContentView];
             [self nextFrameRecord];
         }
     }else if (self.scrollType == kMSimpleAnimateTypeT2B){
-        if (self.z_y == 2 * self.z_height) {
+        if ((int)(self.z_y) >= 2 * (int)(self.z_height)) {
             [self setFrame:self.nextFrame];
             [self getNewContentView];
             [self nextFrameRecord];
@@ -291,6 +283,7 @@
                 *_showIndex      = *_index < 1 ? 0 : *_index - 1;
             }
         }
+        NSLog(@"get new %ld",*_index);
         UIView *aView = self.viewForIndex(*_index);
         if (aView) {
             [self contentAddSubView:aView];

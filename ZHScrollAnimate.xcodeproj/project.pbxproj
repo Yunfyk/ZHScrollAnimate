@@ -7,19 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F406C92E202DA73A0080451C /* ZHSimpleAnimateView.m in Sources */ = {isa = PBXBuildFile; fileRef = F406C927202DA73A0080451C /* ZHSimpleAnimateView.m */; };
+		F406C92F202DA73A0080451C /* ZHSimpleContentWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F406C928202DA73A0080451C /* ZHSimpleContentWrapper.m */; };
+		F406C930202DA73A0080451C /* ZHSimpleScrollContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = F406C92A202DA73A0080451C /* ZHSimpleScrollContentView.m */; };
+		F406C931202DA73A0080451C /* ZHWeakTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = F406C92D202DA73A0080451C /* ZHWeakTimer.m */; };
 		F49161A21FF738D700C90F5F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F49161A11FF738D700C90F5F /* main.m */; };
 		F49161A51FF738D700C90F5F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F49161A41FF738D700C90F5F /* AppDelegate.m */; };
 		F49161A81FF738D700C90F5F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F49161A71FF738D700C90F5F /* ViewController.m */; };
 		F49161AB1FF738D700C90F5F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F49161A91FF738D700C90F5F /* Main.storyboard */; };
 		F49161AD1FF738D700C90F5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F49161AC1FF738D700C90F5F /* Assets.xcassets */; };
 		F49161B01FF738D700C90F5F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F49161AE1FF738D700C90F5F /* LaunchScreen.storyboard */; };
-		F49161BB1FF738F900C90F5F /* ZHSimpleAnimateView.m in Sources */ = {isa = PBXBuildFile; fileRef = F49161B81FF738F900C90F5F /* ZHSimpleAnimateView.m */; };
-		F49161BC1FF738F900C90F5F /* ZHWeakTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = F49161BA1FF738F900C90F5F /* ZHWeakTimer.m */; };
-		F4CA34772014C3B800F77D62 /* ZHSimpleContentWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F4CA34762014C3B800F77D62 /* ZHSimpleContentWrapper.m */; };
-		F4CDD025200DCE840080FA05 /* ZHSimpleScrollContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4CDD024200DCE840080FA05 /* ZHSimpleScrollContentView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F406C926202DA73A0080451C /* ZHSimpleContentWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZHSimpleContentWrapper.h; path = ZHScrollAnimateKit/ZHSimpleContentWrapper.h; sourceTree = "<group>"; };
+		F406C927202DA73A0080451C /* ZHSimpleAnimateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZHSimpleAnimateView.m; path = ZHScrollAnimateKit/ZHSimpleAnimateView.m; sourceTree = "<group>"; };
+		F406C928202DA73A0080451C /* ZHSimpleContentWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZHSimpleContentWrapper.m; path = ZHScrollAnimateKit/ZHSimpleContentWrapper.m; sourceTree = "<group>"; };
+		F406C929202DA73A0080451C /* ZHWeakTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZHWeakTimer.h; path = ZHScrollAnimateKit/ZHWeakTimer.h; sourceTree = "<group>"; };
+		F406C92A202DA73A0080451C /* ZHSimpleScrollContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZHSimpleScrollContentView.m; path = ZHScrollAnimateKit/ZHSimpleScrollContentView.m; sourceTree = "<group>"; };
+		F406C92B202DA73A0080451C /* ZHSimpleAnimateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZHSimpleAnimateView.h; path = ZHScrollAnimateKit/ZHSimpleAnimateView.h; sourceTree = "<group>"; };
+		F406C92C202DA73A0080451C /* ZHSimpleScrollContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZHSimpleScrollContentView.h; path = ZHScrollAnimateKit/ZHSimpleScrollContentView.h; sourceTree = "<group>"; };
+		F406C92D202DA73A0080451C /* ZHWeakTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZHWeakTimer.m; path = ZHScrollAnimateKit/ZHWeakTimer.m; sourceTree = "<group>"; };
 		F491619D1FF738D700C90F5F /* ZHScrollAnimate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZHScrollAnimate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49161A11FF738D700C90F5F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F49161A31FF738D700C90F5F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -30,14 +38,6 @@
 		F49161AC1FF738D700C90F5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F49161AF1FF738D700C90F5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F49161B11FF738D700C90F5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F49161B71FF738F900C90F5F /* ZHSimpleAnimateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZHSimpleAnimateView.h; sourceTree = "<group>"; };
-		F49161B81FF738F900C90F5F /* ZHSimpleAnimateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZHSimpleAnimateView.m; sourceTree = "<group>"; };
-		F49161B91FF738F900C90F5F /* ZHWeakTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZHWeakTimer.h; sourceTree = "<group>"; };
-		F49161BA1FF738F900C90F5F /* ZHWeakTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZHWeakTimer.m; sourceTree = "<group>"; };
-		F4CA34752014C3B800F77D62 /* ZHSimpleContentWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZHSimpleContentWrapper.h; sourceTree = "<group>"; };
-		F4CA34762014C3B800F77D62 /* ZHSimpleContentWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZHSimpleContentWrapper.m; sourceTree = "<group>"; };
-		F4CDD023200DCE840080FA05 /* ZHSimpleScrollContentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZHSimpleScrollContentView.h; sourceTree = "<group>"; };
-		F4CDD024200DCE840080FA05 /* ZHSimpleScrollContentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHSimpleScrollContentView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +51,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F406C925202DA6BC0080451C /* ZHScrollAnimateKit */ = {
+			isa = PBXGroup;
+			children = (
+				F406C92B202DA73A0080451C /* ZHSimpleAnimateView.h */,
+				F406C927202DA73A0080451C /* ZHSimpleAnimateView.m */,
+				F406C926202DA73A0080451C /* ZHSimpleContentWrapper.h */,
+				F406C928202DA73A0080451C /* ZHSimpleContentWrapper.m */,
+				F406C92C202DA73A0080451C /* ZHSimpleScrollContentView.h */,
+				F406C92A202DA73A0080451C /* ZHSimpleScrollContentView.m */,
+				F406C929202DA73A0080451C /* ZHWeakTimer.h */,
+				F406C92D202DA73A0080451C /* ZHWeakTimer.m */,
+			);
+			name = ZHScrollAnimateKit;
+			sourceTree = "<group>";
+		};
 		F49161941FF738D700C90F5F = {
 			isa = PBXGroup;
 			children = (
@@ -75,14 +90,7 @@
 				F49161A61FF738D700C90F5F /* ViewController.h */,
 				F49161A71FF738D700C90F5F /* ViewController.m */,
 				F49161A91FF738D700C90F5F /* Main.storyboard */,
-				F49161B71FF738F900C90F5F /* ZHSimpleAnimateView.h */,
-				F49161B81FF738F900C90F5F /* ZHSimpleAnimateView.m */,
-				F4CA34752014C3B800F77D62 /* ZHSimpleContentWrapper.h */,
-				F4CA34762014C3B800F77D62 /* ZHSimpleContentWrapper.m */,
-				F4CDD023200DCE840080FA05 /* ZHSimpleScrollContentView.h */,
-				F4CDD024200DCE840080FA05 /* ZHSimpleScrollContentView.m */,
-				F49161B91FF738F900C90F5F /* ZHWeakTimer.h */,
-				F49161BA1FF738F900C90F5F /* ZHWeakTimer.m */,
+				F406C925202DA6BC0080451C /* ZHScrollAnimateKit */,
 				F49161AC1FF738D700C90F5F /* Assets.xcassets */,
 				F49161AE1FF738D700C90F5F /* LaunchScreen.storyboard */,
 				F49161B11FF738D700C90F5F /* Info.plist */,
@@ -171,12 +179,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F49161BC1FF738F900C90F5F /* ZHWeakTimer.m in Sources */,
 				F49161A81FF738D700C90F5F /* ViewController.m in Sources */,
 				F49161A51FF738D700C90F5F /* AppDelegate.m in Sources */,
-				F4CDD025200DCE840080FA05 /* ZHSimpleScrollContentView.m in Sources */,
-				F4CA34772014C3B800F77D62 /* ZHSimpleContentWrapper.m in Sources */,
-				F49161BB1FF738F900C90F5F /* ZHSimpleAnimateView.m in Sources */,
+				F406C931202DA73A0080451C /* ZHWeakTimer.m in Sources */,
+				F406C92E202DA73A0080451C /* ZHSimpleAnimateView.m in Sources */,
+				F406C930202DA73A0080451C /* ZHSimpleScrollContentView.m in Sources */,
+				F406C92F202DA73A0080451C /* ZHSimpleContentWrapper.m in Sources */,
 				F49161A21FF738D700C90F5F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,6 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "ZHSimpleScrollContentView.h"
 
+
+/**
+ 1、自动滚动、翻页视图，scrollEnable关闭情况下，不支持手动滚动，可设置多种翻页动画模式，autoAnimate设置YES可自动滚动，nextWithAnimate:complete:方法可以使用
+ 2、scrollEnable开启，支持手动滚动，autoAnimate，nextWithAnimate:complete: 方法无效，滑动方向只支持 kMSimpleAnimateTypeR2L、kMSimpleAnimateTypeB2T
+ */
 @interface ZHSimpleAnimateView : UIView
 /** 底层视图 */
 @property (strong, readonly)  UIView            *contentView;
@@ -52,8 +57,12 @@
 @property (nonatomic, assign) NSUInteger                  numberOfRows;
 
 @property(nonatomic)         BOOL                         showsHorizontalScrollIndicator; // default YES. show indicator while we are tracking. fades out after tracking
-@property(nonatomic)         BOOL                         showsVerticalScrollIndicator;   // default
+@property(nonatomic)         BOOL                         showsVerticalScrollIndicator;   // default NO
 @property(nonatomic)         BOOL                         bounces;                        // default YES. if YES, bounces past edge of content and back again
+
+- (void)reloadDataWithItems:(void(^)(UIView *itemView))enumBlock;
+
+- (void)reloadDataAtIndex:(NSInteger)index forItem:(void(^)(UIView *itemView))enumBlock;
 
 /** scroll to assigned index */
 - (void)scrollToIndex:(NSInteger)index animate:(BOOL)animated;

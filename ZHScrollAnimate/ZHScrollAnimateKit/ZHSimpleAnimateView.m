@@ -29,7 +29,7 @@
         _scrollView.scrollEnabled = NO;
 //        _scrollView.pagingEnabled = YES;
 //        _scrollView.bounces       = NO;
-//        _scrollView.decelerationRate = 0.01;
+        _scrollView.decelerationRate = 0.01;
         _scrollView.delegate      = self;
     }
     return _scrollView;
@@ -86,7 +86,7 @@
 }
 #pragma --mark--初始化--
 - (void)initDataWithType:(kMSimpleAnimateType)scrollType{
-//    self.clipsToBounds          = YES;
+    self.clipsToBounds          = (scrollType != kMSimpleAnimateTypeShuffle);
     self.scrollType             = scrollType;
     self.scrollView.clipsToBounds = NO;
     self.autoAnimate            = NO;
@@ -149,14 +149,14 @@
     if (self.scrollEnable) {
         if ([self isHorizontalDirect]) {
             self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.frame)*self.numberOfRows, CGRectGetHeight(self.frame));
-            if (kMSimpleAnimateTypeL2R == self.scrollType) {
-                [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width*(self.numberOfRows-1), 0) animated:NO];
-            }
+//            if (kMSimpleAnimateTypeL2R == self.scrollType) {
+//                [self.scrollView setContentOffset:CGPointMake(self.scrollView.frame.size.width*(self.numberOfRows-1), 0) animated:NO];
+//            }
         }else if ([self isVerticalDirect]){
             self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)*self.numberOfRows);
-            if (kMSimpleAnimateTypeT2B == self.scrollType) {
-                [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.frame.size.height*(self.numberOfRows-1)) animated:NO];
-            }
+//            if (kMSimpleAnimateTypeT2B == self.scrollType) {
+//                [self.scrollView setContentOffset:CGPointMake(0, self.scrollView.frame.size.height*(self.numberOfRows-1)) animated:NO];
+//            }
         }else{
             self.scrollView.contentSize = CGSizeMake(self.frame.size.width, self.frame.size.height);
         }
@@ -219,6 +219,7 @@
     [self.contentWrapper adjustFrameSize];
     [self.contentWrapper updateContentView];
 }
+
 - (void)dealloc
 {
     NSLog(@"%s",__func__);
@@ -250,12 +251,6 @@
 //    [self.contentWrapper updateContentView];
     if (animated) {
         [self.scrollView setContentOffset:targetOffset animated:YES];
-//        [UIView animateWithDuration:2.3 animations:^{
-//            [self.scrollView setContentOffset:targetOffset];
-//        } completion:^(BOOL finished) {
-//            [self.contentWrapper adjustFrameSize];
-//            self.scrollView.scrollEnabled = YES;
-//        }];
     }else{
         [self.scrollView setContentOffset:targetOffset];
         [self.contentWrapper adjustFrameSize];
@@ -300,6 +295,14 @@
 }
 - (BOOL)bounces{
     return self.scrollView.bounces;
+}
+
+#pragma --mark data source --
+- (void)reloadDataWithItems:(void (^)(UIView *))enumBlock{
+    [self.contentWrapper reloadDataWithItems:enumBlock];
+}
+- (void)reloadDataAtIndex:(NSInteger)index forItem:(void (^)(UIView *))enumBlock{
+    
 }
 @end
 
