@@ -21,7 +21,7 @@ typedef enum : NSUInteger {
     kMSimpleAnimateTypeDissolve     = UIViewAnimationOptionTransitionCrossDissolve,    //渐隐
     kMSimpleAnimateTypeFlipFromTop  = UIViewAnimationOptionTransitionFlipFromTop,      //下向上翻转
     kMSimpleAnimateTypeFlipFromBottom= UIViewAnimationOptionTransitionFlipFromBottom,  //上向下翻转
-    kMSimpleAnimateTypeShuffle
+    kMSimpleAnimateTypeShuffle          //洗牌动画
 } kMSimpleAnimateType;
 
 typedef UIView *(^viewForIndexBlock)(NSInteger index);

@@ -11,6 +11,7 @@
 		F406C92F202DA73A0080451C /* ZHSimpleContentWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F406C928202DA73A0080451C /* ZHSimpleContentWrapper.m */; };
 		F406C930202DA73A0080451C /* ZHSimpleScrollContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = F406C92A202DA73A0080451C /* ZHSimpleScrollContentView.m */; };
 		F406C931202DA73A0080451C /* ZHWeakTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = F406C92D202DA73A0080451C /* ZHWeakTimer.m */; };
+		F4269E4F20731FFD00A71305 /* ZHScrollAnimateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F4269E4E20731FFD00A71305 /* ZHScrollAnimateTests.m */; };
 		F49161A21FF738D700C90F5F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F49161A11FF738D700C90F5F /* main.m */; };
 		F49161A51FF738D700C90F5F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F49161A41FF738D700C90F5F /* AppDelegate.m */; };
 		F49161A81FF738D700C90F5F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F49161A71FF738D700C90F5F /* ViewController.m */; };
@@ -18,6 +19,16 @@
 		F49161AD1FF738D700C90F5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F49161AC1FF738D700C90F5F /* Assets.xcassets */; };
 		F49161B01FF738D700C90F5F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F49161AE1FF738D700C90F5F /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F4269E5120731FFD00A71305 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F49161951FF738D700C90F5F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F491619C1FF738D700C90F5F;
+			remoteInfo = ZHScrollAnimate;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		F406C926202DA73A0080451C /* ZHSimpleContentWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZHSimpleContentWrapper.h; path = ZHScrollAnimateKit/ZHSimpleContentWrapper.h; sourceTree = "<group>"; };
@@ -28,6 +39,9 @@
 		F406C92B202DA73A0080451C /* ZHSimpleAnimateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZHSimpleAnimateView.h; path = ZHScrollAnimateKit/ZHSimpleAnimateView.h; sourceTree = "<group>"; };
 		F406C92C202DA73A0080451C /* ZHSimpleScrollContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZHSimpleScrollContentView.h; path = ZHScrollAnimateKit/ZHSimpleScrollContentView.h; sourceTree = "<group>"; };
 		F406C92D202DA73A0080451C /* ZHWeakTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZHWeakTimer.m; path = ZHScrollAnimateKit/ZHWeakTimer.m; sourceTree = "<group>"; };
+		F4269E4C20731FFD00A71305 /* ZHScrollAnimateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZHScrollAnimateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4269E4E20731FFD00A71305 /* ZHScrollAnimateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZHScrollAnimateTests.m; sourceTree = "<group>"; };
+		F4269E5020731FFD00A71305 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F491619D1FF738D700C90F5F /* ZHScrollAnimate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZHScrollAnimate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49161A11FF738D700C90F5F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F49161A31FF738D700C90F5F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -41,6 +55,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		F4269E4920731FFD00A71305 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F491619A1FF738D700C90F5F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -66,10 +87,20 @@
 			name = ZHScrollAnimateKit;
 			sourceTree = "<group>";
 		};
+		F4269E4D20731FFD00A71305 /* ZHScrollAnimateTests */ = {
+			isa = PBXGroup;
+			children = (
+				F4269E4E20731FFD00A71305 /* ZHScrollAnimateTests.m */,
+				F4269E5020731FFD00A71305 /* Info.plist */,
+			);
+			path = ZHScrollAnimateTests;
+			sourceTree = "<group>";
+		};
 		F49161941FF738D700C90F5F = {
 			isa = PBXGroup;
 			children = (
 				F491619F1FF738D700C90F5F /* ZHScrollAnimate */,
+				F4269E4D20731FFD00A71305 /* ZHScrollAnimateTests */,
 				F491619E1FF738D700C90F5F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				F491619D1FF738D700C90F5F /* ZHScrollAnimate.app */,
+				F4269E4C20731FFD00A71305 /* ZHScrollAnimateTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,6 +142,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		F4269E4B20731FFD00A71305 /* ZHScrollAnimateTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F4269E5520731FFD00A71305 /* Build configuration list for PBXNativeTarget "ZHScrollAnimateTests" */;
+			buildPhases = (
+				F4269E4820731FFD00A71305 /* Sources */,
+				F4269E4920731FFD00A71305 /* Frameworks */,
+				F4269E4A20731FFD00A71305 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F4269E5220731FFD00A71305 /* PBXTargetDependency */,
+			);
+			name = ZHScrollAnimateTests;
+			productName = ZHScrollAnimateTests;
+			productReference = F4269E4C20731FFD00A71305 /* ZHScrollAnimateTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F491619C1FF738D700C90F5F /* ZHScrollAnimate */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F49161B41FF738D700C90F5F /* Build configuration list for PBXNativeTarget "ZHScrollAnimate" */;
@@ -136,6 +186,11 @@
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = zhusanbao;
 				TargetAttributes = {
+					F4269E4B20731FFD00A71305 = {
+						CreatedOnToolsVersion = 9.3;
+						ProvisioningStyle = Automatic;
+						TestTargetID = F491619C1FF738D700C90F5F;
+					};
 					F491619C1FF738D700C90F5F = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = ZZ3GZ6742G;
@@ -157,11 +212,19 @@
 			projectRoot = "";
 			targets = (
 				F491619C1FF738D700C90F5F /* ZHScrollAnimate */,
+				F4269E4B20731FFD00A71305 /* ZHScrollAnimateTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		F4269E4A20731FFD00A71305 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F491619B1FF738D700C90F5F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -175,6 +238,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		F4269E4820731FFD00A71305 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4269E4F20731FFD00A71305 /* ZHScrollAnimateTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F49161991FF738D700C90F5F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -190,6 +261,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F4269E5220731FFD00A71305 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F491619C1FF738D700C90F5F /* ZHScrollAnimate */;
+			targetProxy = F4269E5120731FFD00A71305 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		F49161A91FF738D700C90F5F /* Main.storyboard */ = {
@@ -211,6 +290,66 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		F4269E5320731FFD00A71305 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ZHScrollAnimateTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinxintech.ZHScrollAnimateTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ZHScrollAnimate.app/ZHScrollAnimate";
+			};
+			name = Debug;
+		};
+		F4269E5420731FFD00A71305 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ZHScrollAnimateTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jinxintech.ZHScrollAnimateTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ZHScrollAnimate.app/ZHScrollAnimate";
+			};
+			name = Release;
+		};
 		F49161B21FF738D700C90F5F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -330,6 +469,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		F4269E5520731FFD00A71305 /* Build configuration list for PBXNativeTarget "ZHScrollAnimateTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F4269E5320731FFD00A71305 /* Debug */,
+				F4269E5420731FFD00A71305 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F49161981FF738D700C90F5F /* Build configuration list for PBXProject "ZHScrollAnimate" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

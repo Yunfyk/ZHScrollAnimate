@@ -78,6 +78,8 @@
 //        [self bindViews];
         self.tmpView1 = self.view1;
         self.tmpView2 = self.view2;
+        self.view1.backgroundColor = [UIColor cyanColor];
+        self.view2.backgroundColor = [UIColor brownColor];
         self.currentShowView = self.view1;
 //        self.backgroundColor = [UIColor magentaColor];
 //        _view1.backgroundColor = [UIColor blueColor];
@@ -190,8 +192,16 @@
         return;
     }
     if (self.isAminating) {
-        [self.view1.layer removeAllAnimations];
-        [self.view2.layer removeAllAnimations];
+        if (self.scrollType >= (1 << 20) && self.scrollType != kMSimpleAnimateTypeShuffle) {
+            [self.view1.superview.layer removeAllAnimations];
+            CFRunLoopRun();
+        }else{
+            [self.view1.layer removeAllAnimations];
+            [self.view2.layer removeAllAnimations];
+            if (self.scrollType == kMSimpleAnimateTypeShuffle) {
+                CFRunLoopRun();
+            }
+        }
     }
     if (self.autoAnimate && !isAuto) {
         [self invaliadTimer];
@@ -266,10 +276,15 @@
                 }
                 if (completeHandle) {
                     completeHandle(finished);
+                    CFRunLoopStop(CFRunLoopGetCurrent());
                 }
             }];
         }else{
             [UIView transitionFromView:self.tmpView1 toView:self.tmpView2 duration:duration options:ops completion:^(BOOL finished) {
+                if (!finished) {
+                    self.tmpView1.hidden = NO;
+                    self.tmpView2.hidden = YES;
+                }
                 if (self.viewDidShowAtIndex) {
                     self.viewDidShowAtIndex(self.currentShowView.tmpView, _showIndex);
                 }
@@ -283,6 +298,7 @@
                 }
                 if (completeHandle) {
                     completeHandle(finished);
+                    CFRunLoopStop(CFRunLoopGetCurrent());
                 }
             }];
         }
@@ -352,6 +368,7 @@
 - (void)dealloc
 {
     [_timer invaliadTimer];
+    CFRunLoopStop(CFRunLoopGetCurrent());
     NSLog(@"%s",__func__);
 }
 
@@ -375,29 +392,41 @@
 - (void)shuffleWithView1:(UIView *)view1 view2:(UIView *)view2 complete:(void(^)(BOOL finished))completeHandler{
     if (view1.superview != view2.superview) {return;}
     if ([view1.layer.animationKeys containsObject:@"zhb_shuffle"] && [view2.layer.animationKeys containsObject:@"zhb_shuffle"]) {
+//        [CATransaction begin];
         [view1.layer removeAnimationForKey:@"zhb_shuffle"];
         [view2.layer removeAnimationForKey:@"zhb_shuffle"];
+//        [CATransaction commit];
     }
     self.shuffleFinished = completeHandler;
     [view1.superview bringSubviewToFront:view2];
     CAKeyframeAnimation *animate = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
     CATransform3D transform = CATransform3DIdentity;
     transform.m34 = 1.0f/500;
+    transform = CATransform3DScale(transform, 0.9, 0.9, 1.0);
     transform = CATransform3DTranslate(transform, CGRectGetWidth(view1.frame)*2, 0, 0);
     transform = CATransform3DTranslate(transform, 0, 0, CGRectGetWidth(view1.frame));
     transform = CATransform3DRotate(transform, M_PI_4*0.6, 0, 0, 1);
     transform = CATransform3DRotate(transform, M_PI_2*0.8, 0, 1, 0);
     animate.values = @[[NSValue valueWithCATransform3D:CATransform3DIdentity],[NSValue valueWithCATransform3D:transform],[NSValue valueWithCATransform3D:CATransform3DIdentity]] ;
     animate.duration = 1.0;
+//    animate.removedOnCompletion = NO;
+//    animate.fillMode = kCAFillModeForwards;
     animate.delegate = self;
-    [view1.layer addAnimation:animate forKey:@"zhb_shuffle"];
     
     CAKeyframeAnimation *animate2 = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
     CATransform3D transform2 = CATransform3DIdentity;
     transform2 = CATransform3DTranslate(transform2, 0, 0, CGRectGetWidth(view1.frame)*2);
     animate2.values = @[[NSValue valueWithCATransform3D:CATransform3DIdentity],[NSValue valueWithCATransform3D:CATransform3DIdentity],[NSValue valueWithCATransform3D:transform2]];
     animate2.duration = 1.0;
+//    animate2.removedOnCompletion = NO;
+//    animate2.fillMode = kCAFillModeForwards;
+    [view1.layer addAnimation:animate forKey:@"zhb_shuffle"];
     [view2.layer addAnimation:animate2 forKey:@"zhb_shuffle"];
+//    else{
+//        if (self.shuffleFinished) {
+//            self.shuffleFinished(NO);
+//        }
+//    }
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{

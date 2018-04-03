@@ -25,9 +25,11 @@
     
     self.names = @[@"人生若只如初见",@"何事秋风悲画扇",@"等闲变却故人心",@"却道故人心易变",@"骊山语罢清宵半",@"泪雨霖铃终不怨",@"何如薄幸锦衣郎",@"比翼连枝当日愿"];
     
-    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeFlipFromRight];
+    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeShuffle];
 //    self.scrollView.scrollEnable = YES;
 //    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeCurlUp];
+    
+//    self.scrollView = [[ZHSimpleAnimateView alloc] initWithScrollType:kMSimpleAnimateTypeR2L];
 //    self.scrollView.autoAnimate     = YES;
     self.scrollView.timeInterval    = 2;
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -43,6 +45,7 @@
     
     [self.view addConstraints:HC];
     [self.view addConstraints:VC];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.scrollView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     self.scrollView.numberOfRows = 4;
 //    __weak typeof(self)wkSelf = self;
 //    self.scrollView.viewForIndex = ^UIView *(NSInteger index){
